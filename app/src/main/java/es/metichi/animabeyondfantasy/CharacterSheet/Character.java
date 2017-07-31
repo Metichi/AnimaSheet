@@ -13,14 +13,31 @@ public class Character {
         return modifiers;
     }
 
-        /*
-        * Generación de características
-        * */
+
+
+    public enum Inhumanity{HUMAN, INHUMAN, ZEN}
+
+
+    public Character(CharacteristicRoll roll){
+        //GENERACIÓN DE CARACTERÍSTICAS
+        this.strength = roll.getStrength();
+        this.dexterity = roll.getDexterity();
+        this.agility = roll.getAgility();
+        this.constitution = roll.getConstitution();
+        this.intelligence = roll.getIntelligence();
+        this.power = roll.getPower();
+        this.will = roll.getWill();
+        this.perception = roll.getPerception();
+        this.characteristicRoll = roll;
+
+        //Características secundarias
+        calculateSecondaryCharacteristics();
+    }
+
+    //region Characteristics
     private Characteristic.PhysicalCharacteristic strength, dexterity, agility, constitution;
     private Characteristic.IntellectualCharacteristic intelligence, power, will, perception;
     private CharacteristicRoll characteristicRoll;
-    public enum Inhumanity{HUMAN, INHUMAN, ZEN}
-
 
     public Characteristic.PhysicalCharacteristic getStrength() {
         return strength;
@@ -57,29 +74,9 @@ public class Character {
     public CharacteristicRoll getCharacteristicRoll() {
         return characteristicRoll;
     }
+    //endregion
 
-    /*
-    * Constructor de la ficha
-    * */
-    public Character(CharacteristicRoll roll){
-        //GENERACIÓN DE CARACTERÍSTICAS
-        this.strength = roll.getStrength();
-        this.dexterity = roll.getDexterity();
-        this.agility = roll.getAgility();
-        this.constitution = roll.getConstitution();
-        this.intelligence = roll.getIntelligence();
-        this.power = roll.getPower();
-        this.will = roll.getWill();
-        this.perception = roll.getPerception();
-        this.characteristicRoll = roll;
-
-        //Características secundarias
-        calculateSecondaryCharacteristics();
-    }
-
-        /*
-        * Características secundarias: Apariencia tamaño y género
-        * */
+    //region Secondary Characteristics
 
     public enum Gender{MALE, FEMALE}
     private Gender gender;
@@ -120,26 +117,32 @@ public class Character {
     public Characteristic getAppearance() {
         return appearance;
     }
+    //endregion
 
-        /*
-        *  Race
-        *  */
+    //region Race
+    //endregion
 
-        /*
-        * Experience
-        * */
+    //region Experience
+    public int getTotalLevel(){
+        return 0;
+    }
+    //endregion
 
-        /*
-        * Categories
-        * */
+    //region Categories
+    //endregion
 
-        /*
-        * Combat habilities
-         */
-        /*
-        * Psychic habilities
-         */
-        /*
-        * Mystic habilities
-         */
+    //region Combat habilities
+    //endregion
+
+    //region Psychic habilities
+    //endregion
+
+    //region Mystic habilities
+    //endregion
+
+    // region Getter and Setter
+
+    //endregion
+
+
 }
