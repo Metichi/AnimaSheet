@@ -1,6 +1,7 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefinitions;
 
@@ -22,14 +23,15 @@ public class Character {
 
     public Character(CharacteristicRoll roll){
         //GENERACIÓN DE CARACTERÍSTICAS
-        this.strength = roll.getStrength();
-        this.dexterity = roll.getDexterity();
-        this.agility = roll.getAgility();
-        this.constitution = roll.getConstitution();
-        this.intelligence = roll.getIntelligence();
-        this.power = roll.getPower();
-        this.will = roll.getWill();
-        this.perception = roll.getPerception();
+        characteristics = new HashMap<>(8);
+        characteristics.put("Strength", roll.getStrength());
+        characteristics.put("Dexterity", roll.getDexterity());
+        characteristics.put("Agility", roll.getAgility());
+        characteristics.put("Constitution", roll.getConstitution());
+        characteristics.put("Power", roll.getPower());
+        characteristics.put("Intelligence", roll.getIntelligence());
+        characteristics.put("Will", roll.getWill());
+        characteristics.put("Perception",roll.getPerception());
         this.characteristicRoll = roll;
 
         //Características secundarias
@@ -40,40 +42,39 @@ public class Character {
     }
 
     //region Characteristics
-    private Characteristic.PhysicalCharacteristic strength, dexterity, agility, constitution;
-    private Characteristic.IntellectualCharacteristic intelligence, power, will, perception;
+    private HashMap<String,Characteristic> characteristics;
     private CharacteristicRoll characteristicRoll;
 
-    public Characteristic.PhysicalCharacteristic getStrength() {
-        return strength;
+    public Characteristic getStrength() {
+        return characteristics.get("Strength");
     }
 
-    public Characteristic.PhysicalCharacteristic getDexterity() {
-        return dexterity;
+    public Characteristic getDexterity() {
+        return characteristics.get("Dexterity");
     }
 
-    public Characteristic.PhysicalCharacteristic getAgility() {
-        return agility;
+    public Characteristic getAgility() {
+        return characteristics.get("Agility");
     }
 
-    public Characteristic.PhysicalCharacteristic getConstitution() {
-        return constitution;
+    public Characteristic getConstitution() {
+        return characteristics.get("Constitution");
     }
 
-    public Characteristic.IntellectualCharacteristic getIntelligence() {
-        return intelligence;
+    public Characteristic getIntelligence() {
+        return characteristics.get("Intelligence");
     }
 
-    public Characteristic.IntellectualCharacteristic getPower() {
-        return power;
+    public Characteristic getPower() {
+        return characteristics.get("Power");
     }
 
-    public Characteristic.IntellectualCharacteristic getWill() {
-        return will;
+    public Characteristic getWill() {
+        return characteristics.get("Will");
     }
 
-    public Characteristic.IntellectualCharacteristic getPerception() {
-        return perception;
+    public Characteristic getPerception() {
+        return characteristics.get("Perception");
     }
 
     public CharacteristicRoll getCharacteristicRoll() {
