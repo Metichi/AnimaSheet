@@ -53,4 +53,17 @@ public class Power {
     public ArrayList<Modifier> getPowerModifiers() {
         return powerModifiers;
     }
+
+    public void givePowerTo(Character character){
+        character.getCharacterPowers().add(this);
+        for (Modifier m : powerModifiers){
+            m.giveTo(character);
+        }
+    }
+    public void removePowerFrom(Character character){
+        for(Modifier m : powerModifiers){
+            m.removeFrom(character);
+        }
+        character.getCharacterPowers().remove(this);
+    }
 }

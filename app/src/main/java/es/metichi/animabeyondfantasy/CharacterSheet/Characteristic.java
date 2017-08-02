@@ -88,7 +88,7 @@ public class Characteristic {
             super(v);
         }
     }
-    abstract static class CharacteristicModifier extends Modifier{
+    public abstract static class CharacteristicModifier extends Modifier{
         public CharacteristicModifier(int value, String source, String description){
             super(value, source, description);
         }

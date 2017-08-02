@@ -2,6 +2,8 @@ package es.metichi.animabeyondfantasy.CharacterSheet;
 
 import java.util.ArrayList;
 
+import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefinitions;
+
 /**
  * Created by Metichi on 31/07/2017.
  */
@@ -32,6 +34,9 @@ public class Character {
 
         //Características secundarias
         calculateSecondaryCharacteristics();
+
+        //Powers
+        characterPowers = new ArrayList<>(0);
     }
 
     //region Characteristics
@@ -129,20 +134,33 @@ public class Character {
     //endregion
 
     //region Categories
+    ArrayList<Category> categories;
+
+    public ArrayList<Category> getCategories() {
+        return categories;
+    }
     //endregion
 
-    //region Combat habilities
+    //region Combat skills
     //endregion
 
-    //region Psychic habilities
+    //region Psychic skills
     //endregion
 
-    //region Mystic habilities
+    //region Mystic skills
+    //endregion
+
+    //region Secondary skills
     //endregion
 
     // region Getter and Setter
 
     //endregion
 
+    // region Powers and creation points
+    private ArrayList<Power> characterPowers;
 
+    public ArrayList<Power> getCharacterPowers() {
+        return characterPowers;
+    }
 }
