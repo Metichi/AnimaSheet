@@ -4,15 +4,17 @@ package es.metichi.animabeyondfantasy.CharacterSheet;
  * Created by Metichi on 31/07/2017.
  */
 
-public abstract class Modifier {
+public class Modifier {
     private int value;
     private String source;
     private String description;
+    private String[] affectedFields;
 
-    public Modifier(int value, String source, String description){
+    public Modifier(int value, String source, String description, String[] affectedFields){
         this.value = value;
         this.source = source;
         this.description = description;
+        this.affectedFields = affectedFields;
     }
 
     public String getSource() {
@@ -31,6 +33,11 @@ public abstract class Modifier {
         this.value = value;
     }
 
-    public abstract void giveTo(Character character);
-    public abstract void removeFrom(Character character);
+    public String[] getAffectedFields() {
+        return affectedFields;
+    }
+
+    public void setAffectedFields(String[] affectedFields) {
+        this.affectedFields = affectedFields;
+    }
 }

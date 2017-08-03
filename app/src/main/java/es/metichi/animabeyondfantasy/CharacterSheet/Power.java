@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class Power {
     protected String name;
-    protected String description;
-    protected String source;
-    protected ArrayList<Modifier> powerModifiers;
+    private String description;
+    private String source;
+    private ArrayList<Modifier> powerModifiers;
 
     public Power(){
         this.name = "No name";
@@ -52,18 +52,5 @@ public class Power {
 
     public ArrayList<Modifier> getPowerModifiers() {
         return powerModifiers;
-    }
-
-    public void givePowerTo(Character character){
-        character.getCharacterPowers().add(this);
-        for (Modifier m : powerModifiers){
-            m.giveTo(character);
-        }
-    }
-    public void removePowerFrom(Character character){
-        for(Modifier m : powerModifiers){
-            m.removeFrom(character);
-        }
-        character.getCharacterPowers().remove(this);
     }
 }

@@ -10,13 +10,6 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefiniti
  */
 
 public class Character {
-    private ArrayList<Modifier> modifiers;
-
-    public ArrayList<Modifier> getModifiers() {
-        return modifiers;
-    }
-
-
 
     public enum Inhumanity{HUMAN, INHUMAN, ZEN}
 
@@ -39,6 +32,10 @@ public class Character {
 
         //Powers
         characterPowers = new ArrayList<>(0);
+
+        for(String key : characteristics.keySet()){
+            characteristics.get(key).setName(key);
+        }
     }
 
     //region Characteristics
@@ -80,36 +77,29 @@ public class Character {
     public CharacteristicRoll getCharacteristicRoll() {
         return characteristicRoll;
     }
+    //TODO: Include setters
     //endregion
 
     //region Secondary Characteristics
 
     public enum Gender{MALE, FEMALE}
     private Gender gender;
-    private Characteristic appearance;
-    private Characteristic size;
+
     private void calculateSecondaryCharacteristics(){
-        this.appearance  = new Characteristic(characteristicRoll.getAppearance());
-        this.size = new Characteristic(getStrength().getFinalValue()+getConstitution().getFinalValue()) {
+        characteristics.put("Appearance", new Characteristic(characteristicRoll.getAppearance()));
+
+        Characteristic size = new Characteristic(getStrength().getFinalValue()+getConstitution().getFinalValue()) {
             @Override
             public int getFinalValue(){
                 this.base = getStrength().getFinalValue() + getConstitution().getFinalValue();
                 return super.getFinalValue();
             }
         };
+        characteristics.put("Size", size);
     }
 
     public Characteristic getSize() {
-        return size;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-        if (gender == Gender.FEMALE){
-            ModifierDefinitions.genderSizeModifier.giveTo(this);
-        } else {
-            ModifierDefinitions.genderSizeModifier.removeFrom(this);
-        }
+        return characteristics.get("Appearance");
     }
 
     public Gender getGender() {
@@ -117,15 +107,41 @@ public class Character {
     }
 
     public void setAppearance(Characteristic appearance) {
-        this.appearance = appearance;
+        characteristics.put("Appearance", appearance);
     }
 
     public Characteristic getAppearance() {
-        return appearance;
+        return characteristics.get("Size");
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+        if (this.gender == Gender.FEMALE){
+            this.give(ModifierDefinitions.genderSizeModifier);
+        } else {
+            this.remove(ModifierDefinitions.genderSizeModifier);
+        }
     }
     //endregion
 
     //region Race
+    protected Race race;
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        if (this.race != null){
+            for (Power power : this.race.getPowers()){
+                this.remove(power);
+            }
+        }
+        this.race = race;
+        for(Power power : this.race.getPowers()){
+            this.give(power);
+        }
+    }
     //endregion
 
     //region Experience
@@ -160,8 +176,59 @@ public class Character {
 
     // region Powers and creation points
     private ArrayList<Power> characterPowers;
-
     public ArrayList<Power> getCharacterPowers() {
         return characterPowers;
     }
+
+    public void give(Power power){
+        characterPowers.add(power);
+        for (Modifier modifier : power.getPowerModifiers()){
+            this.give(modifier);
+        }
+    }
+    public void remove(Power power){
+        characterPowers.remove(power);
+        for (Modifier modifier : power.getPowerModifiers()){
+            this.remove(modifier);
+        }
+    }
+    //endregion
+
+    //region Modifiers
+    private ArrayList<Modifier> modifiers;
+    public ArrayList<Modifier> getModifiers() {
+        return modifiers;
+    }
+
+    public void give(Modifier modifier){
+        modifiers.add(modifier);
+
+        if (modifier instanceof Characteristic.CharacteristicModifier){
+            Characteristic.CharacteristicModifier characteristicModifier = (Characteristic.CharacteristicModifier) modifier;
+            for (String affectedCharacteristic : characteristicModifier.getAffectedFields()){
+                for (String characteristic : characteristics.keySet()){
+                    if (characteristic.equals(affectedCharacteristic)){
+                        characteristics.get(characteristic).add(modifier);
+                    }
+                }
+            }
+        }
+    }
+
+    public void remove(Modifier modifier){
+        modifiers.remove(modifier);
+
+        if (modifier instanceof Characteristic.CharacteristicModifier){
+            Characteristic.CharacteristicModifier characteristicModifier = (Characteristic.CharacteristicModifier) modifier;
+            for (String affectedCharacteristic : characteristicModifier.getAffectedFields()){
+                for (String characteristic : characteristics.keySet()){
+                    if (characteristic.equals(affectedCharacteristic)){
+                        characteristics.get(characteristic).remove(modifier);
+                    }
+                }
+            }
+        }
+    }
+
+    //endregion
 }

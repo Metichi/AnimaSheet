@@ -12,7 +12,7 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefiniti
  * Created by Metichi on 01/08/2017.
  */
 
-public abstract class Category {
+public abstract class Category implements Modifyable{
     public enum Archetype{
         FIGHTER,
         MYSTIC,
@@ -24,18 +24,15 @@ public abstract class Category {
 
     private int level;
     private Category previousCategory;
-    private ArrayList<ModifierDefinitions.CostModifier> costModifiers;
 
-    public ArrayList<ModifierDefinitions.CostModifier> getCostModifiers() {
-        return costModifiers;
-    }
+
 
     public Category(int level, @Nullable Category previousCategory){
         this.level = level;
         this.previousCategory = previousCategory;
     }
 
-    //region Level and DP management
+    //region Level
     public int getLevel() {
         return level;
     }
@@ -44,7 +41,7 @@ public abstract class Category {
         this.level = level;
     }
 
-    private int getDPAtThisLevel(){
+    public int getDPAtThisLevel(){
         if (previousCategory == null){
             switch (level){
                 case 0:
@@ -59,7 +56,7 @@ public abstract class Category {
         }
     }
 
-    private int getMulticlassCost(){
+    public int getMulticlassCost(){
         if (previousCategory == null){
             return 0;
         } else {
@@ -94,15 +91,17 @@ public abstract class Category {
     public int getMaxDPOnPsychic(){
         return (getMaxDP()*getPercentageOnPsychic())/100;
     }
+    //endregion
 
+    //region DP management
     private HashMap<Skill, Integer> dpInvestedOnSkills = new HashMap<>();
+
     public void setDPInvestedOn(Skill skill, int dp){
         dpInvestedOnSkills.put(skill,dp);
     }
     public int getDPInvestedOn(Skill skill){
         return dpInvestedOnSkills.get(skill);
     }
-    public int getBaseValueOf(Skill skill){ return getDPInvestedOn(skill)/getCostOf(skill);}
 
     protected ArrayList<Table> knownTables = new ArrayList<>(0);
     public void buyTable(Table table){
@@ -111,7 +110,6 @@ public abstract class Category {
     public void forgetTable(Table table){
         knownTables.remove(table);
     }
-
     public ArrayList<Table> getKnownTables() {
         return knownTables;
     }
@@ -192,21 +190,58 @@ public abstract class Category {
         this.previousCategory = previousCategory;
     }
 
+
+
     public abstract ArrayList<Archetype> getArchetype();
-    public abstract int getHpCost();
-    public abstract int getHpByLevel();
-    public abstract int getInnitiativeByLevel();
-    public abstract int getCVByLevel();
-    public abstract int getCategoryBonusOf(Skill skill);
+    public abstract CategoryModifier getHpByLevel();
+    public abstract CategoryModifier getInnitiativeByLevel();
+    public abstract CategoryModifier getCVByLevel();
+    public abstract CategoryModifier getCategoryBonusOf(Skill skill);
 
     public abstract int getPercentageOnCombat();
     public abstract int getPercentageOnMystic();
     public abstract int getPercentageOnPsychic();
 
-    public abstract int getCostOf(Skill skill);
+    public abstract int getCategoryCostOf(Skill skill);
+    public int getCostOf(Skill skill){
+        int cost = getCategoryCostOf(skill);
+        for (Modifier m : costModifiers){
+            if (m instanceof CostModifier){
+                if(((CostModifier) m).affects(skill)){cost += m.getValue();}
+            }
+        }
+        return Math.max(1,cost);
+    }
     public int getCostOf(Table table){
         return table.getDpCost();
     }
 
+
+
+    ArrayList<Modifier> costModifiers = new ArrayList<>(0);
+    @Override
+    public ArrayList<Modifier> getModifiers() {
+        return costModifiers;
+    }
+
+    public static class CostModifier extends Modifier{
+        public CostModifier(int value, String source, String description, String[] affectedFields){
+            super(value,source,description,affectedFields);
+        }
+        public boolean affects(Skill skill){
+            for (String field : getAffectedFields()){
+                if(field.equals(skill.getName())){return true;}
+            }
+            return false;
+        }
+    }
+    public static abstract class CategoryModifier extends Modifier{
+        public CategoryModifier(String source, String description, String[] affectedFields){
+            super(0,source,description,affectedFields);
+        }
+
+        @Override
+        public abstract int getValue();
+    }
 
 }
