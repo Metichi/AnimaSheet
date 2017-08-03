@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefinitions;
+import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.SkillDefinitions;
 
 /**
  * Created by Metichi on 31/07/2017.
@@ -36,6 +37,13 @@ public class Character {
         for(String key : characteristics.keySet()){
             characteristics.get(key).setName(key);
         }
+
+        //Skills
+        combatSkills = SkillDefinitions.generateCombatSkillsFor(this);
+        mysticSkills = SkillDefinitions.generateMysticSkillsFor(this);
+        psychicSkill = SkillDefinitions.generatePsychicSkillsFor(this);
+        secondarySkills = SkillDefinitions.generateSecondarySkillsFor(this);
+        hp = SkillDefinitions.generateHealthFor(this);
     }
 
     //region Characteristics
@@ -159,19 +167,33 @@ public class Character {
     //endregion
 
     //region Combat skills
+    HashMap<String, Skill> combatSkills;
     //endregion
 
     //region Psychic skills
+    HashMap<String,Skill> psychicSkill;
     //endregion
 
     //region Mystic skills
+    HashMap<String,Skill> mysticSkills;
     //endregion
 
     //region Secondary skills
+    HashMap<String,Skill> secondarySkills;
+    Skill hp;
     //endregion
 
     // region Getter and Setter
+    public HashMap<String,Skill> getAllSkills(){
+        HashMap<String,Skill> allSkills = new HashMap<>();
+        allSkills.putAll(combatSkills);
+        allSkills.putAll(psychicSkill);
+        allSkills.putAll(mysticSkills);
+        allSkills.putAll(secondarySkills);
+        allSkills.put(hp.getName(),hp);
 
+        return allSkills;
+    }
     //endregion
 
     // region Powers and creation points

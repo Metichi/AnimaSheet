@@ -33,10 +33,6 @@ public class SkillDefinitions {
 
         Skill.CombatSkill cm = new Skill.CombatSkill("CM", null,character.getCategories()){
             @Override
-            public int getSkillModifier(){
-                return 0;
-            }
-            @Override
             public int getBaseValue(){
                 return super.getBaseValue()*5;
             }
@@ -174,5 +170,121 @@ public class SkillDefinitions {
         mysticSkills.put(unsummon.getName(),unsummon);
 
         return mysticSkills;
+    }
+    public static HashMap<String,Skill> generatePsychicSkillsFor(Character character){
+        Skill.PsychicSkill cv = new Skill.PsychicSkill("CV", null,character.getCategories());
+        Skill.PsychicSkill psychicProjection = new Skill.PsychicSkill("PsychicProjection",character.getDexterity(),character.getCategories());
+
+        HashMap<String,Skill> psychicSkills = new HashMap<>(2);
+        psychicSkills.put(cv.getName(),cv);
+        psychicSkills.put(psychicProjection.getName(),psychicProjection);
+
+        return psychicSkills;
+    }
+    public static HashMap<String,Skill> generateSecondarySkillsFor(Character character){
+        Skill.SecondarySkill acrobatics = new Skill.SecondarySkill("Acrobatics",character.getAgility(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.ATHLETIC);
+        Skill.SecondarySkill athletism = new Skill.SecondarySkill("Athletism", character.getAgility(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.ATHLETIC);
+        Skill.SecondarySkill ride = new Skill.SecondarySkill("Ride", character.getAgility(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.ATHLETIC);
+        Skill.SecondarySkill swim = new Skill.SecondarySkill("Swim", character.getAgility(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.ATHLETIC);
+        Skill.SecondarySkill climb = new Skill.SecondarySkill("Climb",character.getAgility(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.ATHLETIC);
+        Skill.SecondarySkill jump = new Skill.SecondarySkill("Jump",character.getStrength(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.ATHLETIC);
+
+        Skill.SecondarySkill composture = new Skill.SecondarySkill("Composture",character.getWill(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.VIGOR);
+        Skill.SecondarySkill featOfStrength = new Skill.SecondarySkill("FeatOfStrength",character.getStrength(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.VIGOR);
+        Skill.SecondarySkill painEndurance = new Skill.SecondarySkill("PainEndurance",character.getWill(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.VIGOR);
+
+        Skill.SecondarySkill notice = new Skill.SecondarySkill("Notice",character.getPerception(),character.getCategories(),Skill.SecondarySkill.SecondarySkillType.PERCEPTIVE);
+        Skill.SecondarySkill search = new Skill.SecondarySkill("Search",character.getPerception(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.PERCEPTIVE);
+        Skill.SecondarySkill track = new Skill.SecondarySkill("Track",character.getPerception(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.PERCEPTIVE);
+
+        Skill.SecondarySkill animals = new Skill.SecondarySkill("Animals",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill science = new Skill.SecondarySkill("Science",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill herbalism = new Skill.SecondarySkill("Herbalism",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill history = new Skill.SecondarySkill("History",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill medicine = new Skill.SecondarySkill("Medicine",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill memorice = new Skill.SecondarySkill("Memorice",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill navigation = new Skill.SecondarySkill("Navigation",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill occult = new Skill.SecondarySkill("Occult",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill appraisal = new Skill.SecondarySkill("Appraisal",character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+        Skill.SecondarySkill magicPerception = new Skill.SecondarySkill("MagicPerception",character.getPower(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL);
+
+        Skill.SecondarySkill style = new Skill.SecondarySkill("Style", character.getPower(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SOCIAL);
+        Skill.SecondarySkill intimidation = new Skill.SecondarySkill("Intimidation", character.getWill(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SOCIAL);
+        Skill.SecondarySkill leadership = new Skill.SecondarySkill("Leadership", character.getPower(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SOCIAL);
+        Skill.SecondarySkill persuasion = new Skill.SecondarySkill("Persuasion", character.getIntelligence(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SOCIAL);
+
+        Skill.SecondarySkill lockpicking = new Skill.SecondarySkill("Lockpicking", character.getDexterity(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE);
+        Skill.SecondarySkill disguise = new Skill.SecondarySkill("Disguise", character.getDexterity(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE);
+        Skill.SecondarySkill hiding = new Skill.SecondarySkill("Hiding", character.getPerception(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE);
+        Skill.SecondarySkill stealing = new Skill.SecondarySkill("Stealing",character.getDexterity(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE);
+        Skill.SecondarySkill stealth = new Skill.SecondarySkill("Stealth", character.getAgility(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE);
+        Skill.SecondarySkill traps = new Skill.SecondarySkill("Traps",character.getPerception(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE);
+        Skill.SecondarySkill poison = new Skill.SecondarySkill("Poison", character.getPerception(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE);
+
+        Skill.SecondarySkill art = new Skill.SecondarySkill("Art",character.getPower(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.CREATIVE);
+        Skill.SecondarySkill dance = new Skill.SecondarySkill("Dance", character.getAgility(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.CREATIVE);
+        Skill.SecondarySkill forge = new Skill.SecondarySkill("Forge", character.getDexterity(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.CREATIVE);
+        Skill.SecondarySkill music = new Skill.SecondarySkill("Music", character.getPower(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.CREATIVE);
+        Skill.SecondarySkill sleightOfHand = new Skill.SecondarySkill("SleightOfHand",character.getDexterity(),character.getCategories(), Skill.SecondarySkill.SecondarySkillType.CREATIVE);
+
+        HashMap<String,Skill> secondarySkills = new HashMap<>(38);
+        placeAtMap(secondarySkills,acrobatics);
+        placeAtMap(secondarySkills,athletism);
+        placeAtMap(secondarySkills,swim);
+        placeAtMap(secondarySkills,ride);
+        placeAtMap(secondarySkills,climb);
+        placeAtMap(secondarySkills,jump);
+
+        placeAtMap(secondarySkills,style);
+        placeAtMap(secondarySkills,intimidation);
+        placeAtMap(secondarySkills,leadership);
+        placeAtMap(secondarySkills,persuasion);
+
+        placeAtMap(secondarySkills,notice);
+        placeAtMap(secondarySkills,search);
+        placeAtMap(secondarySkills,track);
+
+        placeAtMap(secondarySkills,animals);
+        placeAtMap(secondarySkills,science);
+        placeAtMap(secondarySkills,herbalism);
+        placeAtMap(secondarySkills,history);
+        placeAtMap(secondarySkills,medicine);
+        placeAtMap(secondarySkills,memorice);
+        placeAtMap(secondarySkills,navigation);
+        placeAtMap(secondarySkills,occult);
+        placeAtMap(secondarySkills,appraisal);
+        placeAtMap(secondarySkills,magicPerception);
+
+        placeAtMap(secondarySkills,composture);
+        placeAtMap(secondarySkills,featOfStrength);
+        placeAtMap(secondarySkills,painEndurance);
+
+        placeAtMap(secondarySkills,lockpicking);
+        placeAtMap(secondarySkills,disguise);
+        placeAtMap(secondarySkills,hiding);
+        placeAtMap(secondarySkills,stealing);
+        placeAtMap(secondarySkills,stealth);
+        placeAtMap(secondarySkills,traps);
+        placeAtMap(secondarySkills,poison);
+
+        placeAtMap(secondarySkills,art);
+        placeAtMap(secondarySkills,dance);
+        placeAtMap(secondarySkills,forge);
+        placeAtMap(secondarySkills,music);
+        placeAtMap(secondarySkills,sleightOfHand);
+
+        return secondarySkills;
+    }
+    public static Skill generateHealthFor(Character character){
+        Skill health = new Skill("HP",character.getConstitution(),character.getCategories()){
+            @Override
+            public int getBaseValue(){
+                return super.getBaseValue()*characteristic.getFinalValue()+20;
+            }
+        };
+        return health;
+    }
+    private static void placeAtMap(HashMap<String,Skill> map, Skill skill){
+        map.put(skill.getName(),skill);
     }
 }

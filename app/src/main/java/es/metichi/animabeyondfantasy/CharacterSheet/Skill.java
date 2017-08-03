@@ -1,5 +1,7 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import android.support.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -15,7 +17,7 @@ public class Skill implements Modifyable{
     protected String name;
     private Skill(){}
 
-    public Skill(String name, Characteristic characteristic, ArrayList<Category> categories){
+    public Skill(String name, @Nullable Characteristic characteristic, ArrayList<Category> categories){
         this.characteristic = characteristic;
         this.categories = categories;
         this.modifiers = new ArrayList<>(0);
@@ -24,7 +26,11 @@ public class Skill implements Modifyable{
     }
 
     public int getSkillModifier(){
-        return characteristic.getSkillModifier();
+        if (characteristic == null){
+            return 0;
+        } else {
+            return characteristic.getSkillModifier();
+        }
     }
 
     public Characteristic getCharacteristic() {
