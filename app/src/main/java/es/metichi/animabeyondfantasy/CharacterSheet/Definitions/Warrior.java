@@ -2,6 +2,8 @@ package es.metichi.animabeyondfantasy.CharacterSheet.Definitions;
 
 import android.graphics.SweepGradient;
 
+import java.util.HashMap;
+
 import es.metichi.animabeyondfantasy.CharacterSheet.Category;
 import es.metichi.animabeyondfantasy.CharacterSheet.Skill;
 
@@ -15,7 +17,6 @@ public class Warrior extends Category {
         CategoryModifier hpModifier = new CategoryModifier("Clase Guerrero","Guerreros ganan 15HP por nivel", new String[]{"HP"}) {
             @Override
             public int getValue() {
-
                 return 15*getLevel();
             }
         };
@@ -46,18 +47,12 @@ public class Warrior extends Category {
                 return 20;
             } else {
                 switch (skill.getName()){
-                    case "Attack":
-                        return 2;
-                    case "Defense":
-                        return 2;
-                    case "Dodge":
-                        return 2;
-                    case "WearArmor":
-                        return 2;
-                    case "CM":
-                        return 5;
-                    default:
-                        return 99;
+                    case "Attack": return 2;
+                    case "Defense": return 2;
+                    case "Dodge": return 2;
+                    case "WearArmor": return 2;
+                    case "CM": return 5;
+                    default: return 99;
                 }
             }
         } else if (skill instanceof Skill.MysticSkill){
@@ -74,12 +69,37 @@ public class Warrior extends Category {
                 default: return 99;
             }
         } else if (skill instanceof Skill.PsychicSkill){
-            //TODO: Finish the definitions.
-            return 99;
+            switch (skill.getName()){
+                case "CV": return 20;
+                case "PsychicProjection": return 3;
+                default: return 99;
+            }
         } else if (skill instanceof Skill.SecondarySkill){
-            return 99;
+            int value = 99;
+            HashMap<Skill.SecondarySkill.SecondarySkillType,Integer> typeMap = new HashMap<>(7);
+            typeMap.put(Skill.SecondarySkill.SecondarySkillType.ATHLETIC,2);
+            typeMap.put(Skill.SecondarySkill.SecondarySkillType.SOCIAL,2);
+            typeMap.put(Skill.SecondarySkill.SecondarySkillType.PERCEPTIVE,2);
+            typeMap.put(Skill.SecondarySkill.SecondarySkillType.INTELLECTUAL,3);
+            typeMap.put(Skill.SecondarySkill.SecondarySkillType.VIGOR,2);
+            typeMap.put(Skill.SecondarySkill.SecondarySkillType.SUBTERFUGE,2);
+            typeMap.put(Skill.SecondarySkill.SecondarySkillType.CREATIVE,2);
+            value = typeMap.get(((Skill.SecondarySkill) skill).getType());
+
+            switch (skill.getName()){
+                case "FeatOfStrength": return 1;
+                default: return value;
+            }
         } else {
-            return 99;
+            switch (skill.getName()){
+                case "HP": return 15;
+                default: return 99;
+            }
         }
+    }
+
+    @Override
+    public CategoryModifier getInnitiativeByLevel() {
+        return null;
     }
 }

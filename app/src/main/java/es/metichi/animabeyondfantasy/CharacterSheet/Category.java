@@ -24,9 +24,6 @@ public abstract class Category implements Modifyable{
 
     private int level;
     private Category previousCategory;
-
-
-
     public Category(int level, @Nullable Category previousCategory){
         this.level = level;
         this.previousCategory = previousCategory;
@@ -185,7 +182,6 @@ public abstract class Category implements Modifyable{
     public Category getPreviousCategory() {
         return previousCategory;
     }
-
     public void setPreviousCategory(Category previousCategory) {
         this.previousCategory = previousCategory;
     }
@@ -224,6 +220,20 @@ public abstract class Category implements Modifyable{
         return costModifiers;
     }
 
+    @Override
+    public void add(Modifier modifier) {
+        if(modifier instanceof CostModifier){
+            costModifiers.add(modifier);
+        }
+    }
+
+    @Override
+    public void remove(Modifier modifier) {
+        if(modifier instanceof CostModifier){
+            costModifiers.remove(modifier);
+        }
+    }
+
     public static class CostModifier extends Modifier{
         public CostModifier(int value, String source, String description, String[] affectedFields){
             super(value,source,description,affectedFields);
@@ -235,7 +245,7 @@ public abstract class Category implements Modifyable{
             return false;
         }
     }
-    public static abstract class CategoryModifier extends Modifier{
+    public static abstract class CategoryModifier extends Skill.SkillModifier{
         public CategoryModifier(String source, String description, String[] affectedFields){
             super(0,source,description,affectedFields);
         }

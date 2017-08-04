@@ -3,9 +3,11 @@ package es.metichi.animabeyondfantasy.CharacterSheet;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
+ * A skill is a value affected by a characteristic and the categories of a character.
+ *
+ * The skill is
  * Created by Metichi on 01/08/2017.
  */
 
@@ -25,7 +27,7 @@ public class Skill implements Modifyable{
         naturalModifier = new NaturalModifier();
     }
 
-    public int getSkillModifier(){
+    public int getCharacteristicModifier(){
         if (characteristic == null){
             return 0;
         } else {
@@ -104,19 +106,21 @@ public class Skill implements Modifyable{
     }
     //endregion
 
-    public class NaturalModifier extends Modifier{
-
-
+    public static class SkillModifier extends Modifier{
+        SkillModifier(int value, String source, String description, String[] affectedFields){
+            super(value,source,description,affectedFields);
+        }
+    }
+    public class NaturalModifier extends SkillModifier{
         public NaturalModifier(){
             super(0,"Bonificador natural",
-                    "Invertir puntos en el bonificador natural multiplica el bono de característica",
+                    "Bono dependiente de la característica",
                     new String[0]);
         }
-
         @Override
         public int getValue(){
-            this.setValue(getSkillModifier());
-            return getSkillModifier();
+            this.setValue(getCharacteristicModifier());
+            return getCharacteristicModifier();
         }
     }
 
@@ -143,7 +147,7 @@ public class Skill implements Modifyable{
             }
 
             @Override
-            public int getSkillModifier(){
+            public int getCharacteristicModifier(){
                 if (characteristic.getFinalValue() <= 10){
                     return characteristic.getFinalValue();
                 } else {
@@ -161,7 +165,7 @@ public class Skill implements Modifyable{
             }
 
             @Override
-            public int getSkillModifier(){
+            public int getCharacteristicModifier(){
                 int characteristicValue = characteristic.getFinalValue();
                 if (characteristicValue <= 9){
                     return 1;
@@ -189,6 +193,7 @@ public class Skill implements Modifyable{
         private NaturalModifier naturalModifier;
         private InnateModifier innateModifier;
         int naturalBonusPoints;
+        int innatePoints;
         public enum SecondarySkillType{
             ATHLETIC,
             SOCIAL,
@@ -203,6 +208,7 @@ public class Skill implements Modifyable{
             super(name, characteristic,categories);
             this.type = type;
             naturalModifier = new NaturalModifier();
+            naturalModifier.setDescription("Un modifcador natural suma el bono de característica");
             innateModifier = new InnateModifier();
             modifiers.add(naturalModifier);
             modifiers.add(innateModifier);
@@ -213,8 +219,14 @@ public class Skill implements Modifyable{
             return naturalBonusPoints;
         }
 
-        public void setNaturalBonusPoints(int naturalBonus) {
-            this.naturalBonusPoints = naturalBonus;
+        public void setNaturalBonusPoints(int naturalBonus) {this.naturalBonusPoints = naturalBonus;}
+
+        public int getInnatePoints() {
+            return innatePoints;
+        }
+
+        public void setInnatePoints(int innatePoints) {
+            this.innatePoints = innatePoints;
         }
 
         public SecondarySkillType getType() {
@@ -222,8 +234,8 @@ public class Skill implements Modifyable{
         }
 
         @Override
-        public int getSkillModifier(){
-            return super.getSkillModifier()*(getNaturalBonusPoints()+1);
+        public int getCharacteristicModifier(){
+            return super.getCharacteristicModifier()*(getNaturalBonusPoints()+1);
         }
 
         @Override
@@ -235,18 +247,9 @@ public class Skill implements Modifyable{
         }
 
         public class InnateModifier extends Modifier{
-            private int innatePoints;
             public InnateModifier(){
                 super(0,"Bonificador Innato","Cada punto de innato da un +10 a la habilidad", new String[0]);
                 innatePoints = 0;
-            }
-
-            public int getInnatePoints() {
-                return innatePoints;
-            }
-
-            public void setInnatePoints(int innatePoints) {
-                this.innatePoints = innatePoints;
             }
 
             @Override

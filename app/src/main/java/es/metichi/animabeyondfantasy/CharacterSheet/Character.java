@@ -5,11 +5,12 @@ import java.util.HashMap;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefinitions;
 import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.SkillDefinitions;
-
 /**
- * Created by Metichi on 31/07/2017.
+ * Character sheet
+ *
+ * This class will represent the character sheet of a character, containing all information related
+ * to its skills, spells, race, categories, etc.
  */
-
 public class Character {
 
     public enum Inhumanity{HUMAN, INHUMAN, ZEN}
@@ -179,8 +180,8 @@ public class Character {
     //endregion
 
     //region Secondary skills
-    HashMap<String,Skill> secondarySkills;
-    Skill hp;
+    private HashMap<String,Skill> secondarySkills;
+    private Skill hp;
     //endregion
 
     // region Getter and Setter
@@ -202,12 +203,26 @@ public class Character {
         return characterPowers;
     }
 
+
+    /**
+     * Gives a power to a character.
+     *
+     * A power consists of a description and any number of modifiers. The power is stored in the
+     * character sheet and the modifiers applied to the character.
+     * @param power
+     */
     public void give(Power power){
         characterPowers.add(power);
         for (Modifier modifier : power.getPowerModifiers()){
             this.give(modifier);
         }
     }
+
+    /**
+     * Removes a power from a character
+     * @see #give(Power)
+     * @param power
+     */
     public void remove(Power power){
         characterPowers.remove(power);
         for (Modifier modifier : power.getPowerModifiers()){
@@ -218,36 +233,67 @@ public class Character {
 
     //region Modifiers
     private ArrayList<Modifier> modifiers;
+
+    /**
+     * Shows the complete list of modifiers of a character
+     *
+     * When a modifier is given to the character, is stored in a complete list as well as in each
+     * modifyable field.
+     * @return Complete list of modifiers.
+     */
     public ArrayList<Modifier> getModifiers() {
         return modifiers;
     }
 
+    /**
+     * Gives a modifier to a character
+     *
+     * This method checks for the different kinds of modifier and call the add(Modifier) method on each
+     * modifyable.
+     * @param modifier Modifier to apply
+     */
     public void give(Modifier modifier){
         modifiers.add(modifier);
+        addNremove(modifier,true);
+    }
 
+    /**
+     * Removes a modifier from a character
+     *
+     * This method checks for the different kinds of modifier and call the remove(Modifier) method on each
+     * modifyable.
+     * @param modifier
+     */
+    public void remove(Modifier modifier){
+        modifiers.remove(modifier);
+        addNremove(modifier,false);
+    }
+
+    private void addNremove(Modifier modifier, boolean add){
         if (modifier instanceof Characteristic.CharacteristicModifier){
             Characteristic.CharacteristicModifier characteristicModifier = (Characteristic.CharacteristicModifier) modifier;
             for (String affectedCharacteristic : characteristicModifier.getAffectedFields()){
                 for (String characteristic : characteristics.keySet()){
                     if (characteristic.equals(affectedCharacteristic)){
-                        characteristics.get(characteristic).add(modifier);
+                        if(add) {characteristics.get(characteristic).add(modifier);}
+                        else {characteristics.get(characteristic).remove(modifier);}
                     }
                 }
             }
-        }
-    }
-
-    public void remove(Modifier modifier){
-        modifiers.remove(modifier);
-
-        if (modifier instanceof Characteristic.CharacteristicModifier){
-            Characteristic.CharacteristicModifier characteristicModifier = (Characteristic.CharacteristicModifier) modifier;
-            for (String affectedCharacteristic : characteristicModifier.getAffectedFields()){
-                for (String characteristic : characteristics.keySet()){
-                    if (characteristic.equals(affectedCharacteristic)){
-                        characteristics.get(characteristic).remove(modifier);
+        } else if (modifier instanceof Skill.SkillModifier){
+            HashMap<String, Skill> allSkills = getAllSkills();
+            for(String skill : allSkills.keySet()){
+                for(String affectedSkill : modifier.getAffectedFields()){
+                    if(skill.equals(affectedSkill)){
+                        if(add) {allSkills.get(skill).add(modifier);}
+                        else { allSkills.get(skill).remove(modifier);}
                     }
                 }
+            }
+        } else if (modifier instanceof Category.CostModifier){
+            for (Category category : categories){
+                if (add) {category.add(modifier);}
+                else {category.remove(modifier);}
             }
         }
     }

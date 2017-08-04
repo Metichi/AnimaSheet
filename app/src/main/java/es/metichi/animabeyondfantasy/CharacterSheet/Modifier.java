@@ -25,6 +25,10 @@ public class Modifier {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getValue() {
         return value;
     }
