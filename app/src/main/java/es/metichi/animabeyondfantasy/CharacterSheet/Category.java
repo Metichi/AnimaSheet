@@ -12,7 +12,7 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefiniti
  * Created by Metichi on 01/08/2017.
  */
 
-public abstract class Category implements Modifyable{
+public class Category implements Modifyable{
     public enum Archetype{
         FIGHTER,
         MYSTIC,
@@ -24,9 +24,11 @@ public abstract class Category implements Modifyable{
 
     private int level;
     private Category previousCategory;
-    public Category(int level, @Nullable Category previousCategory){
+    private CategoryBundle categoryBundle;
+    public Category(int level, @Nullable Category previousCategory, CategoryBundle categoryBundle){
         this.level = level;
         this.previousCategory = previousCategory;
+        this.categoryBundle = categoryBundle;
     }
 
     //region Level
@@ -37,6 +39,14 @@ public abstract class Category implements Modifyable{
      */
     public int getLevel() {
         return level;
+    }
+
+    public int getTotalLevel(){
+        if (previousCategory == null){
+            return getLevel();
+        } else {
+            return getLevel() + previousCategory.getTotalLevel();
+        }
     }
 
     /**
@@ -208,10 +218,9 @@ public abstract class Category implements Modifyable{
     public void setPreviousCategory(Category previousCategory) {
         this.previousCategory = previousCategory;
     }
-
-
-
-    public abstract ArrayList<Archetype> getArchetype();
+    public ArrayList<Archetype> getArchetype(){
+        return categoryBundle.getArchetypes();
+    };
 
     /**
      * Category dependant bonus of a specific skill
@@ -224,13 +233,86 @@ public abstract class Category implements Modifyable{
      * @param skill Skill to modify
      * @return Category modifier to that skill.
      */
-    public abstract CategoryModifier getCategoryModifierOf(Skill skill);
+    public CategoryModifier getCategoryModifierOf(Skill skill){
+        String source = categoryBundle.getName();
+        String description = String.format("Ganancia de %s por nivel", skill.getName());
+        String[] affectedFields = new String[]{skill.getName()};
+        if (categoryBundle.getSkillGainByLevel().containsKey(skill.getName())) {
+            final int gain = categoryBundle.getSkillGainByLevel().get(skill.getName());
+            CategoryModifier categoryModifier = new CategoryModifier(source, description, affectedFields) {
+                @Override
+                public int getValue() {
+                    return getLevel() * gain;
+                }
+            };
+            return categoryModifier;
+        } else if (skill.getName().equals("CV")){
+            final int interval = categoryBundle.getIntervalOfLevelBetweenCV();
+            return new CategoryModifier(source,description,affectedFields) {
+                @Override
+                public int getValue() {
+                    if (getPreviousCategory() == null){return 1 + (getTotalLevel()-1)/interval;}
+                    else {return (getTotalLevel()-1)/interval;}
+                }
+            };
+        } else {
+            return null;
+        }
+    }
 
-    public abstract int getPercentageOnCombat();
-    public abstract int getPercentageOnMystic();
-    public abstract int getPercentageOnPsychic();
+    public int getPercentageOnCombat(){
+        return categoryBundle.getPercentageOnCombat();
+    };
+    public int getPercentageOnMystic(){
+        return categoryBundle.getPercentageOnMystic();
+    };
+    public int getPercentageOnPsychic(){
+        return categoryBundle.getPercentageOnPsychic();
+    }
 
-    public abstract int getCategoryCostOf(Skill skill);
+    public int getCategoryCostOf(Skill skill){
+        if(skill instanceof Skill.CombatSkill){
+            if (skill instanceof Skill.CombatSkill.KiPoint){return categoryBundle.getCostOfKiPoints();}
+            else if (skill instanceof Skill.CombatSkill.KiAcumulation){return categoryBundle.getCostOfKiAcumulation();}
+            else{
+                if(categoryBundle.getCostOfCombatSkills().containsKey(skill.getName())){
+                    return categoryBundle.getCostOfCombatSkills().get(skill.getName());
+                } else {
+                    return 99;
+                }
+            }
+        } else if (skill instanceof Skill.MysticSkill){
+            if (categoryBundle.getCostOfMysticSkills().containsKey(skill.getName())){
+                return categoryBundle.getCostOfMysticSkills().get(skill.getName());
+            } else {
+                return 99;
+            }
+        } else if (skill instanceof Skill.PsychicSkill){
+            if (categoryBundle.getCostOfPsychicSkills().containsKey(skill.getName())){
+                return categoryBundle.getCostOfPsychicSkills().get(skill.getName());
+            } else {
+                return 99;
+            }
+        } else if (skill instanceof Skill.SecondarySkill){
+            int typeCost;
+            if (categoryBundle.getCostOfSecondaryType().containsKey(((Skill.SecondarySkill) skill).getType())){
+                typeCost = categoryBundle.getCostOfSecondaryType().get(((Skill.SecondarySkill) skill).getType());
+            } else {
+                return 99;
+            }
+            if (categoryBundle.getCostOfSecondarySkill().containsKey(skill.getName())){
+                return categoryBundle.getCostOfSecondarySkill().get(skill.getName());
+            } else {
+                return typeCost;
+            }
+        } else {
+            switch (skill.getName()){
+                case "HP": return categoryBundle.getHpCost();
+                default: return 99;
+            }
+        }
+
+    }
     public int getCostOf(Skill skill){
         int cost = getCategoryCostOf(skill);
         for (Modifier m : costModifiers){
@@ -284,6 +366,119 @@ public abstract class Category implements Modifyable{
 
         @Override
         public abstract int getValue();
+    }
+
+    public static class CategoryBundle{
+        private String name;
+        private int percentageOnPsychic;
+        private int percentageOnMystic;
+        private int percentageOnCombat;
+
+        private int costOfKiPoints;
+        private int costOfKiAcumulation;
+
+        private HashMap<String, Integer> costOfCombatSkills;
+        private HashMap<String, Integer> costOfMysticSkills;
+        private HashMap<String, Integer> costOfPsychicSkills;
+
+        private HashMap<Skill.SecondarySkill.SecondarySkillType,Integer> costOfSecondaryType;
+        private HashMap<String, Integer> costOfSecondarySkill;
+        private int hpCost;
+        private ArrayList<Archetype> archetypes;
+
+        private int intervalOfLevelBetweenCV;
+        private HashMap<String,Integer> skillGainByLevel;
+
+        public CategoryBundle(String name, int percentageOnCombat, int percentageOnMystic,
+                              int percentageOnPsychic, int costOfKiAcumulation, int costOfKiPoints,
+                              int hpCost, int intervalOfLevelBetweenCV,
+                              HashMap<String,Integer> costOfCombatSkills,
+                              HashMap<String,Integer> costOfMysticSkills,
+                              HashMap<String,Integer> costOfPsychicSkills,
+                              HashMap<String,Integer> costOfSecondarySkill,
+                              HashMap<String,Integer> skillGainByLevel,
+                              HashMap<Skill.SecondarySkill.SecondarySkillType,Integer> costOfSecondaryType,
+                              ArrayList<Archetype> archetypes){
+            this.name = name;
+            this.percentageOnCombat = percentageOnCombat;
+            this.percentageOnMystic = percentageOnMystic;
+            this.percentageOnPsychic = percentageOnPsychic;
+            this.costOfKiAcumulation = costOfKiAcumulation;
+            this.costOfKiPoints = costOfKiPoints;
+            this.hpCost = hpCost;
+            this.intervalOfLevelBetweenCV = intervalOfLevelBetweenCV;
+            this.costOfCombatSkills = costOfCombatSkills;
+            this.costOfPsychicSkills = costOfPsychicSkills;
+            this.costOfMysticSkills = costOfMysticSkills;
+            this.costOfSecondarySkill = costOfSecondarySkill;
+            this.skillGainByLevel = skillGainByLevel;
+            this.costOfSecondaryType = costOfSecondaryType;
+            this.archetypes = archetypes;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public HashMap<Skill.SecondarySkill.SecondarySkillType, Integer> getCostOfSecondaryType() {
+            return costOfSecondaryType;
+        }
+
+        public HashMap<String, Integer> getCostOfCombatSkills() {
+            return costOfCombatSkills;
+        }
+
+        public HashMap<String, Integer> getCostOfMysticSkills() {
+            return costOfMysticSkills;
+        }
+
+        public HashMap<String, Integer> getCostOfPsychicSkills() {
+            return costOfPsychicSkills;
+        }
+
+        public HashMap<String, Integer> getCostOfSecondarySkill() {
+            return costOfSecondarySkill;
+        }
+
+        public HashMap<String, Integer> getSkillGainByLevel() {
+            return skillGainByLevel;
+        }
+
+        public int getCostOfKiAcumulation() {
+            return costOfKiAcumulation;
+        }
+
+        public int getCostOfKiPoints() {
+            return costOfKiPoints;
+        }
+
+        public int getHpCost() {
+            return hpCost;
+        }
+
+        public int getIntervalOfLevelBetweenCV() {
+            return intervalOfLevelBetweenCV;
+        }
+
+        public int getPercentageOnCombat() {
+            return percentageOnCombat;
+        }
+
+        public int getPercentageOnMystic() {
+            return percentageOnMystic;
+        }
+
+        public int getPercentageOnPsychic() {
+            return percentageOnPsychic;
+        }
+
+        public void setSkillGainByLevel(HashMap<String, Integer> skillGainByLevel) {
+            this.skillGainByLevel = skillGainByLevel;
+        }
+
+        public ArrayList<Archetype> getArchetypes() {
+            return archetypes;
+        }
     }
 
 }
