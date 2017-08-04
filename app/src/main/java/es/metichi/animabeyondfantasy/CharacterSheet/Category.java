@@ -30,14 +30,30 @@ public abstract class Category implements Modifyable{
     }
 
     //region Level
+
+    /**
+     * Gets the level of the category
+     * @return Level of the category
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Sets the level of the category
+     * @param level Level of the category
+     */
     public void setLevel(int level) {
         this.level = level;
     }
 
+    /**
+     * Ammount of DP aviable
+     *
+     * This method calculates the ammount of DP aviable to this category depending on the level and
+     * wether or not there is a previous category.
+     * @return DP aviable
+     */
     public int getDPAtThisLevel(){
         if (previousCategory == null){
             switch (level){
@@ -53,6 +69,13 @@ public abstract class Category implements Modifyable{
         }
     }
 
+    /**
+     * Returns the cost of changing class
+     *
+     * This method returns an integer value that represents the ammount of DP expended in changing
+     * from the previous Category to this one.
+     * @return cost of changing category.
+     */
     public int getMulticlassCost(){
         if (previousCategory == null){
             return 0;
@@ -189,10 +212,19 @@ public abstract class Category implements Modifyable{
 
 
     public abstract ArrayList<Archetype> getArchetype();
-    public abstract CategoryModifier getHpByLevel();
-    public abstract CategoryModifier getInnitiativeByLevel();
-    public abstract CategoryModifier getCVByLevel();
-    public abstract CategoryModifier getCategoryBonusOf(Skill skill);
+
+    /**
+     * Category dependant bonus of a specific skill
+     *
+     * Categories offer bonuses to skills related to the level in that category. When inputed a skill
+     * the method will compare it with the category specific definitions and return a CategoryModifier
+     * object wich value depends on the level of the skill.
+     *
+     * Hp, Innitiative and CV are considered skills.
+     * @param skill Skill to modify
+     * @return Category modifier to that skill.
+     */
+    public abstract CategoryModifier getCategoryModifierOf(Skill skill);
 
     public abstract int getPercentageOnCombat();
     public abstract int getPercentageOnMystic();

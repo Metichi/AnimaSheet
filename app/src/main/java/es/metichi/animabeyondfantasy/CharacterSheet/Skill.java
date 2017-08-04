@@ -31,7 +31,7 @@ public class Skill implements Modifyable{
         if (characteristic == null){
             return 0;
         } else {
-            return characteristic.getSkillModifier();
+            return characteristic.getSKillBonus();
         }
     }
 
@@ -57,7 +57,10 @@ public class Skill implements Modifyable{
     public ArrayList<Category.CategoryModifier> getCategoryModifiers(){
         ArrayList<Category.CategoryModifier> categoryModifiers = new ArrayList<>(categories.size());
         for (Category category : categories){
-            categoryModifiers.add(category.getCategoryBonusOf(this));
+            Category.CategoryModifier categoryModifier = category.getCategoryModifierOf(this);
+            if (categoryModifier != null) {
+                categoryModifiers.add(category.getCategoryModifierOf(this));
+            }
         }
         return categoryModifiers;
     }

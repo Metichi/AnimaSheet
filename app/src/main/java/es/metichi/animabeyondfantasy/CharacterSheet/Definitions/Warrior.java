@@ -1,7 +1,9 @@
 package es.metichi.animabeyondfantasy.CharacterSheet.Definitions;
 
 import android.graphics.SweepGradient;
+import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Category;
@@ -12,15 +14,8 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Skill;
  */
 
 public class Warrior extends Category {
-    @Override
-    public CategoryModifier getHpByLevel() {
-        CategoryModifier hpModifier = new CategoryModifier("Clase Guerrero","Guerreros ganan 15HP por nivel", new String[]{"HP"}) {
-            @Override
-            public int getValue() {
-                return 15*getLevel();
-            }
-        };
-        return hpModifier;
+    public Warrior(int level, @Nullable Category previousCategory){
+        super(level,previousCategory);
     }
 
     @Override
@@ -99,7 +94,77 @@ public class Warrior extends Category {
     }
 
     @Override
-    public CategoryModifier getInnitiativeByLevel() {
-        return null;
+    public CategoryModifier getCategoryModifierOf(Skill skill) {
+        CategoryModifier innitiativeModifier = new CategoryModifier("Guerrero","Ganancia de turno por nivel",new String[]{"Innitiative"}) {
+            @Override
+            public int getValue() {
+                return 5*getLevel();
+            }
+        };
+        CategoryModifier hpModifier = new CategoryModifier("Guerrero","Ganancia de HP por nivel", new String[]{"HP"}) {
+            @Override
+            public int getValue() {
+                return 15*getLevel();
+            }
+        };
+        CategoryModifier cmModifier = new CategoryModifier("Guerrero","Ganancia de CM por nivel", new String[]{"CM"}) {
+            @Override
+            public int getValue() {
+                return 25*getLevel();
+            }
+        };
+        CategoryModifier cvModifier = new CategoryModifier("Guerrero", "Ganancia de CV por nivel", new String[]{"CV"}) {
+            @Override
+            public int getValue() {
+                return 1+ (getLevel()-1)/3;
+            }
+        };
+        CategoryModifier attackModifier = new CategoryModifier("Guerrero", "Ganancia de Ataque por nivel", new String[]{"Attack"}) {
+            @Override
+            public int getValue() {
+                return 5*getLevel();
+            }
+        };
+        CategoryModifier defenseModifier = new CategoryModifier("Guerrero", "Ganancia de Defensa por nivel", new String[]{"Defense"}) {
+            @Override
+            public int getValue() {
+                return 5*getLevel();
+            }
+        };
+        CategoryModifier wearArmorModifier = new CategoryModifier("Guerrero", "Ganancia de Llevar Armadura por nivel", new String[]{"WearArmor"}) {
+            @Override
+            public int getValue() {
+                return 5*getLevel();
+            }
+        };
+        CategoryModifier featOfStrengthModifier = new CategoryModifier("Guerrero", "Ganancia a Proezas de Fuerza por nivel", new String[]{"FeatOfStrength"}) {
+            @Override
+            public int getValue() {
+                return 5*getLevel();
+            }
+        };
+
+        HashMap<String, CategoryModifier> categoryModifiers = new HashMap<>(8);
+        categoryModifiers.put("Innitiative",innitiativeModifier);
+        categoryModifiers.put("HP",hpModifier);
+        categoryModifiers.put("CM",cmModifier);
+        categoryModifiers.put("CV",cvModifier);
+        categoryModifiers.put("Attack",attackModifier);
+        categoryModifiers.put("Defense",defenseModifier);
+        categoryModifiers.put("WearArmor",wearArmorModifier);
+        categoryModifiers.put("FeatOfStrength",featOfStrengthModifier);
+
+        if (categoryModifiers.containsKey(skill.getName())){
+            return categoryModifiers.get(skill.getName());
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<Archetype> getArchetype() {
+        ArrayList<Archetype> archetypes = new ArrayList<>(1);
+        archetypes.add(Archetype.FIGHTER);
+        return archetypes;
     }
 }

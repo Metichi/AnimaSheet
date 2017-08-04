@@ -108,7 +108,7 @@ public class Character {
     }
 
     public Characteristic getSize() {
-        return characteristics.get("Appearance");
+        return characteristics.get("Size");
     }
 
     public Gender getGender() {
@@ -120,7 +120,7 @@ public class Character {
     }
 
     public Characteristic getAppearance() {
-        return characteristics.get("Size");
+        return characteristics.get("Appearance");
     }
 
     public void setGender(Gender gender) {
@@ -169,6 +169,10 @@ public class Character {
 
     //region Combat skills
     HashMap<String, Skill> combatSkills;
+    //endregion
+
+    //region Innitiative
+
     //endregion
 
     //region Psychic skills
