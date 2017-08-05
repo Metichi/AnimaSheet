@@ -32,6 +32,10 @@ public class Category implements Modifyable, Serializable{
         this.categoryBundle = categoryBundle;
     }
 
+    public String getName(){
+        return categoryBundle.getName();
+    }
+
     //region Level
 
     /**

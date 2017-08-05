@@ -1,5 +1,12 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +22,7 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.SkillDefinitions
 public class Character implements Serializable {
 
     public enum Inhumanity{HUMAN, INHUMAN, ZEN}
+    private static final long serialVersionUID = 88L;
 
     public Character(CharacteristicRoll roll){
         //GENERACIÓN DE CARACTERÍSTICAS
@@ -45,7 +53,22 @@ public class Character implements Serializable {
         psychicSkill = SkillDefinitions.generatePsychicSkillsFor(this);
         secondarySkills = SkillDefinitions.generateSecondarySkillsFor(this);
         hp = SkillDefinitions.generateHealthFor(this);
+
+        //Fluff
+        setName("Unnamed");
     }
+
+    //region Character Fluff
+    String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    //endregion
 
     //region Characteristics
     private HashMap<String,Characteristic> characteristics;
@@ -154,13 +177,8 @@ public class Character implements Serializable {
     //endregion
 
     //region Experience
-    public Category getCurrentCategory() {
-        if (getCategories().size() != 0) {
-            return getCategories().get(getCategories().size() - 1);
-        } else {
-            return null;
-        }
-    }
+
+
     public int getTotalLevel(){
         if(getCurrentCategory()!= null) {
             return getCurrentCategory().getTotalLevel();
@@ -175,6 +193,20 @@ public class Character implements Serializable {
 
     public ArrayList<Category> getCategories() {
         return categories;
+    }
+    /**
+     * Displays the active category
+     *
+     * The active category of a character is the one in wich new DP are spent. It is always the last
+     * category added as, during gameplay, one should not be able to modify the previous ones.
+     * @return Last Category object of the getCategories() method.
+     */
+    public Category getCurrentCategory() {
+        if (getCategories().size() != 0) {
+            return getCategories().get(getCategories().size() - 1);
+        } else {
+            return null;
+        }
     }
     //endregion
 
@@ -370,4 +402,49 @@ public class Character implements Serializable {
     }
 
     //endregion
+
+    //region Save and Load
+    public String getDefaultFilename(){
+        return String.format("%s_%s_Lvl_%s", getName(),getCurrentCategory().getName(), getTotalLevel());
+    }
+    public String getFileExtension(){
+        return ".abf";
+    }
+
+    public boolean save(File path, String name, Boolean overwrite){
+        File newFile = new File(path,name+ getFileExtension());
+        if(newFile.exists()&&!overwrite){
+            return false;
+        } else {
+            try {
+                FileOutputStream fos = new FileOutputStream(newFile);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(this);
+                oos.close();
+                fos.close();
+                return true;
+            }catch(FileNotFoundException e){
+                return false;
+            }catch (IOException e){
+                return false;
+            }
+        }
+    }
+    public static Character load(File file){
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Object readObject = ois.readObject();
+            ois.close();
+            fis.close();
+
+            if(readObject instanceof Character){
+                return (Character) readObject;
+            } else {
+                return null;
+            }
+        } catch (FileNotFoundException e){return null;}
+        catch (IOException e){return null;}
+        catch (ClassNotFoundException e){return null;}
+    }
 }
