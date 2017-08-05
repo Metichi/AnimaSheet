@@ -154,9 +154,16 @@ public class Character implements Serializable {
     //endregion
 
     //region Experience
+    public Category getCurrentCategory() {
+        if (getCategories().size() != 0) {
+            return getCategories().get(getCategories().size() - 1);
+        } else {
+            return null;
+        }
+    }
     public int getTotalLevel(){
-        if(getCategories().size()>0) {
-            return getCategories().get(getCategories().size() - 1).getTotalLevel();
+        if(getCurrentCategory()!= null) {
+            return getCurrentCategory().getTotalLevel();
         }else{
             return 0;
         }
