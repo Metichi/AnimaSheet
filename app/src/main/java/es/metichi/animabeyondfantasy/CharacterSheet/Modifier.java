@@ -1,10 +1,12 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import java.io.Serializable;
+
 /**
  * Created by Metichi on 31/07/2017.
  */
 
-public class Modifier {
+public class Modifier implements Serializable {
     private int value;
     private String source;
     private String description;
@@ -26,7 +28,7 @@ public class Modifier {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+
     }
 
     public int getValue() {

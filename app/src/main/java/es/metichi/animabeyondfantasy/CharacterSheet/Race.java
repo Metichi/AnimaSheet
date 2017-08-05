@@ -1,12 +1,13 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Metichi on 31/07/2017.
  */
 
-public class Race {
+public class Race implements Serializable{
     private String  name;
     private String description;
     private ArrayList<Power> powers;

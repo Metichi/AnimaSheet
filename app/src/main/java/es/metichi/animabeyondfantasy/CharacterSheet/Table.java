@@ -1,5 +1,6 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Items.Item;
@@ -8,7 +9,7 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Items.Item;
  * Created by Metichi on 01/08/2017.
  */
 
-public class Table {
+public class Table implements Serializable {
     protected int dpCost;
     protected int name;
     protected ArrayList<Power> powers;

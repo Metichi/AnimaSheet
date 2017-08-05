@@ -2,6 +2,7 @@ package es.metichi.animabeyondfantasy.CharacterSheet;
 
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,7 +13,7 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefiniti
  * Created by Metichi on 01/08/2017.
  */
 
-public class Category implements Modifyable{
+public class Category implements Modifyable, Serializable{
     public enum Archetype{
         FIGHTER,
         MYSTIC,

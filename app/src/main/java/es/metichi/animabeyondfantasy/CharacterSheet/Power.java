@@ -1,12 +1,13 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Metichi on 31/07/2017.
  */
 
-public class Power {
+public class Power implements Serializable {
     protected String name;
     private String description;
     private String source;

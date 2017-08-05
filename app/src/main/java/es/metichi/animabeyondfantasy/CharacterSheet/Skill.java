@@ -2,6 +2,7 @@ package es.metichi.animabeyondfantasy.CharacterSheet;
 
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  * Created by Metichi on 01/08/2017.
  */
 
-public class Skill implements Modifyable{
+public class Skill implements Modifyable, Serializable{
     protected Characteristic characteristic;
     protected ArrayList<Modifier> modifiers;
     protected ArrayList<Category> categories;

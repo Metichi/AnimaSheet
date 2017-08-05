@@ -1,5 +1,6 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -8,7 +9,7 @@ import java.util.TreeMap;
  * Created by Metichi on 31/07/2017.
  */
 
-public class Characteristic implements Modifyable {
+public class Characteristic implements Modifyable, Serializable {
     String name;
     protected int base;
     protected ArrayList<Modifier> modifiers;

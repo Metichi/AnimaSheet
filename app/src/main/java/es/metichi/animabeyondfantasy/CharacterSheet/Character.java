@@ -1,5 +1,6 @@
 package es.metichi.animabeyondfantasy.CharacterSheet;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,7 +12,7 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.SkillDefinitions
  * This class will represent the character sheet of a character, containing all information related
  * to its skills, spells, race, categories, etc.
  */
-public class Character {
+public class Character implements Serializable {
 
     public enum Inhumanity{HUMAN, INHUMAN, ZEN}
 
