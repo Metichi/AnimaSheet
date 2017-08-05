@@ -27,11 +27,19 @@ public class Skill implements Modifyable{
         naturalModifier = new NaturalModifier();
     }
 
-    public int getCharacteristicModifier(){
+    /**
+     * Characteristic Bonus to the skill
+     *
+     * Returns the value of the characteristic related to this skill to be used by the natural modifier.
+     * This method should be Overriden by specific cases where the skill has its own way of calculating the
+     * natural bonus, like CV, HP, Innitiative...
+     * @return
+     */
+    public int getCharacteristicBonus(){
         if (characteristic == null){
             return 0;
         } else {
-            return characteristic.getSKillBonus();
+            return characteristic.getSkillBonus();
         }
     }
 
@@ -122,8 +130,8 @@ public class Skill implements Modifyable{
         }
         @Override
         public int getValue(){
-            this.setValue(getCharacteristicModifier());
-            return getCharacteristicModifier();
+            this.setValue(getCharacteristicBonus());
+            return getCharacteristicBonus();
         }
     }
 
@@ -150,7 +158,7 @@ public class Skill implements Modifyable{
             }
 
             @Override
-            public int getCharacteristicModifier(){
+            public int getCharacteristicBonus(){
                 if (characteristic.getFinalValue() <= 10){
                     return characteristic.getFinalValue();
                 } else {
@@ -168,7 +176,7 @@ public class Skill implements Modifyable{
             }
 
             @Override
-            public int getCharacteristicModifier(){
+            public int getCharacteristicBonus(){
                 int characteristicValue = characteristic.getFinalValue();
                 if (characteristicValue <= 9){
                     return 1;
@@ -237,8 +245,8 @@ public class Skill implements Modifyable{
         }
 
         @Override
-        public int getCharacteristicModifier(){
-            return super.getCharacteristicModifier()*(getNaturalBonusPoints()+1);
+        public int getCharacteristicBonus(){
+            return super.getCharacteristicBonus()*(getNaturalBonusPoints()+1);
         }
 
         @Override

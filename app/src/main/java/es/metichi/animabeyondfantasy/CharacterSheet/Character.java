@@ -15,7 +15,6 @@ public class Character {
 
     public enum Inhumanity{HUMAN, INHUMAN, ZEN}
 
-
     public Character(CharacteristicRoll roll){
         //GENERACIÓN DE CARACTERÍSTICAS
         characteristics = new HashMap<>(8);
@@ -155,7 +154,11 @@ public class Character {
 
     //region Experience
     public int getTotalLevel(){
-        return 0;
+        if(getCategories().size()>0) {
+            return getCategories().get(getCategories().size() - 1).getTotalLevel();
+        }else{
+            return 0;
+        }
     }
     //endregion
 
@@ -168,11 +171,59 @@ public class Character {
     //endregion
 
     //region Combat skills
-    HashMap<String, Skill> combatSkills;
+    private HashMap<String, Skill> combatSkills;
+    private Skill.CombatSkill getCombatSkill(String string) {return (Skill.CombatSkill) combatSkills.get(string);}
+    public Skill.CombatSkill getAttack(){
+        return getCombatSkill("Attack");
+    }
+    public Skill.CombatSkill getDefense() {return getCombatSkill("Defense");}
+    public Skill.CombatSkill getDodge() {return getCombatSkill("Dodge");}
+
     //endregion
 
-    //region Innitiative
+    //region Abstract Skills
+    private Skill hp;
+    public Skill getHp() {
+        return hp;
+    }
+    private int currentHp;
+    public int getCurrentHp() {
+        return currentHp;
+    }
+    public void setCurrentHp(int currentHp) {
+        this.currentHp = currentHp;
+    }
+    public void healToMax(){this.currentHp = hp.getFinalValue();}
 
+    public class Innitiative extends Skill{
+        Characteristic dexterity;
+        Characteristic agility;
+        public Innitiative(Characteristic dexterity, Characteristic agility ,ArrayList<Category> categories){
+            super("Innitiative",null,categories);
+            this.dexterity = dexterity;
+            this.agility = agility;
+        }
+        @Override
+        public int getBaseValue(){
+            return 20;
+        }
+
+        public int getDexBonus(){
+            return dexterity.getSkillBonus();
+        }
+        public int getAgiBonus(){
+            return agility.getSkillBonus();
+        }
+        @Override
+        public int getCharacteristicBonus(){
+            return getDexBonus() + getAgiBonus();
+        }
+    }
+    private Innitiative innitiative = new Innitiative(getDexterity(),getAgility(),getCategories());
+
+    public Innitiative getInnitiative() {
+        return innitiative;
+    }
     //endregion
 
     //region Psychic skills
@@ -185,7 +236,7 @@ public class Character {
 
     //region Secondary skills
     private HashMap<String,Skill> secondarySkills;
-    private Skill hp;
+
     //endregion
 
     // region Getter and Setter
@@ -196,6 +247,7 @@ public class Character {
         allSkills.putAll(mysticSkills);
         allSkills.putAll(secondarySkills);
         allSkills.put(hp.getName(),hp);
+        allSkills.put(innitiative.getName(),innitiative);
 
         return allSkills;
     }
@@ -271,6 +323,13 @@ public class Character {
     public void remove(Modifier modifier){
         modifiers.remove(modifier);
         addNremove(modifier,false);
+    }
+
+    public void refreshModifiers(){
+        for (Modifier m : modifiers){
+            addNremove(m,false);
+            addNremove(m,true);
+        }
     }
 
     private void addNremove(Modifier modifier, boolean add){

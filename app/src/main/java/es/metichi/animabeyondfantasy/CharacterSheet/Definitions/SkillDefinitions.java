@@ -65,7 +65,7 @@ public class SkillDefinitions {
     public static HashMap<String,Skill> generateMysticSkillsFor(Character character){
         Skill.MysticSkill zeon = new Skill.MysticSkill("Zeon", character.getPower(),character.getCategories()){
             @Override
-            public int getCharacteristicModifier(){
+            public int getCharacteristicBonus(){
                 switch (getCharacteristic().getFinalValue()){
                     case 1: return 5;
                     case 2: return 20;
@@ -97,7 +97,7 @@ public class SkillDefinitions {
         };
         final Skill.MysticSkill act = new Skill.MysticSkill("ACT",character.getPower(),character.getCategories()){
             @Override
-            public int getCharacteristicModifier(){
+            public int getCharacteristicBonus(){
                 int value = getCharacteristic().getFinalValue();
                 if (value <= 4){
                     return 0;
@@ -120,24 +120,24 @@ public class SkillDefinitions {
 
             @Override
             public int getBaseValue(){
-                return super.getBaseValue()* getCharacteristicModifier();
+                return super.getBaseValue()* getCharacteristicBonus();
             }
 
         };
         Skill.MysticSkill zeonRegen = new Skill.MysticSkill("ZeonRegen",null,character.getCategories()){
             @Override
-            public int getCharacteristicModifier(){
+            public int getCharacteristicBonus(){
                 return act.getFinalValue();
             }
             @Override
             public int getBaseValue(){
-                return super.getBaseValue()* getCharacteristicModifier();
+                return super.getBaseValue()* getCharacteristicBonus();
             }
         };
         Skill.MysticSkill magicProjection = new Skill.MysticSkill("MagicProjection",character.getDexterity(),character.getCategories());
         Skill.MysticSkill magicLevel = new Skill.MysticSkill("MagicLevel", character.getIntelligence(),character.getCategories()){
             @Override
-            public int getCharacteristicModifier(){
+            public int getCharacteristicBonus(){
                 int value = getCharacteristic().getFinalValue();
                 if (value <= 5) {return 0;}
                 else if(value <= 10) {return (value-5)*10;}

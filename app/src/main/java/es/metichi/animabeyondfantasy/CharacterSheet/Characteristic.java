@@ -36,7 +36,7 @@ public class Characteristic implements Modifyable {
     }
     public int getUsable(Character.Inhumanity i){return this.getFinalValue();}
 
-    public int getSKillBonus(){
+    public int getSkillBonus(){
         NavigableMap<Integer,Integer> skillModifiers = new TreeMap<Integer,Integer>();
         skillModifiers.put(1,-30);
         skillModifiers.put(2,-20);
