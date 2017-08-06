@@ -1,6 +1,8 @@
 package es.metichi.animabeyondfantasy;
 
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +14,7 @@ import android.widget.TextView;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Character;
 
-public class SheetActivity extends AppCompatActivity {
+public class SheetActivity extends AppCompatActivity implements GeneralFragment.CharacterEditor {
     private String[] mSheetTabs;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -35,6 +37,12 @@ public class SheetActivity extends AppCompatActivity {
         character = (Character) getIntent().getSerializableExtra("CHARACTER");
 
         updateHeader();
+
+        Fragment generalFragment = new GeneralFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .add(R.id.content_frame, generalFragment)
+                .commit();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
@@ -54,5 +62,10 @@ public class SheetActivity extends AppCompatActivity {
         characterName.setText(character.getName());
         characterLevel.setText(String.valueOf(character.getTotalLevel()));
         characterCategory.setText(character.getCurrentCategory() == null ? getResources().getText(R.string.noCategory):character.getCurrentCategory().getName());
+    }
+
+    @Override
+    public Character getCharacter() {
+        return character;
     }
 }

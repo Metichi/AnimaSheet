@@ -67,7 +67,7 @@ public class Character implements Serializable {
     }
 
     //region Character Fluff
-    String name;
+    private String name;
 
     public String getName() {
         return name;
@@ -75,6 +75,66 @@ public class Character implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    private String homeTown = "";
+
+    public void setHomeTown(String homeTown) {
+        this.homeTown = homeTown;
+    }
+
+    public String getHomeTown() {
+        return homeTown;
+    }
+
+    private double height = 1.70;
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    private int weight = 60;
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    private String eyeColor = "";
+
+    public void setEyeColor(String eyeColor) {
+        this.eyeColor = eyeColor;
+    }
+
+    public String getEyeColor() {
+        return eyeColor;
+    }
+
+    private String hairColor = "";
+
+    public String getHairColor() {
+        return hairColor;
+    }
+
+    public void setHairColor(String hairColor) {
+        this.hairColor = hairColor;
+    }
+
+    private int age = 18;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
     //endregion
 
@@ -170,6 +230,7 @@ public class Character implements Serializable {
     public Race getRace() {
         return race;
     }
+    public String getRaceName(){return race == null ? "No Race" : race.getName();}
 
     public void setRace(Race race) {
         if (this.race != null){
