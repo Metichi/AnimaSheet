@@ -16,11 +16,18 @@ public class Characteristic implements Modifyable, Serializable {
 
     public Characteristic(int base){
         this.base = base;
+        modifiers = new ArrayList<>(0);
+        name = "Null";
     }
 
     public int getBase() {
         return base;
     }
+
+    public void setBase(int base) {
+        this.base = base;
+    }
+
     public int getModifierValue(){
         int v = 0;
         for (Modifier m : modifiers){
@@ -30,8 +37,10 @@ public class Characteristic implements Modifyable, Serializable {
     }
     public int getFinalValue(){
         int v = base;
-        for (Modifier m : modifiers){
-            v += m.getValue();
+        if(modifiers.size()>0) {
+            for (Modifier m : modifiers) {
+                v += m.getValue();
+            }
         }
         return v;
     }

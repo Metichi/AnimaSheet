@@ -4,6 +4,8 @@
     <string name="characterLevelLabel">Nivel</string>
     <string name="noCharacter">No character</string>
 
+    <string name="characteristicRollPick">Seleccione tirada de características</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
@@ -14,5 +16,8 @@
         <item>Magia</item>
         <item>Psíquico</item>
         <item>Secundarias</item>
+    </string-array>
+    <string-array name="characteristicRolls">
+        <item>Custom Roll</item>
     </string-array>
 </resources>

@@ -37,11 +37,16 @@ public class Character implements Serializable {
         characteristics.put("Perception",roll.getPerception());
         this.characteristicRoll = roll;
 
+        //Categorias
+        categories = new ArrayList<>(0);
+
         //Características secundarias
         calculateSecondaryCharacteristics();
+        gender = Gender.MALE;
 
         //Powers
         characterPowers = new ArrayList<>(0);
+        modifiers = new ArrayList<>(0);
 
         for(String key : characteristics.keySet()){
             characteristics.get(key).setName(key);
@@ -53,6 +58,9 @@ public class Character implements Serializable {
         psychicSkill = SkillDefinitions.generatePsychicSkillsFor(this);
         secondarySkills = SkillDefinitions.generateSecondarySkillsFor(this);
         hp = SkillDefinitions.generateHealthFor(this);
+
+        //Abstract Skills
+        calculateAbstractSkills();
 
         //Fluff
         setName("Unnamed");
@@ -118,7 +126,7 @@ public class Character implements Serializable {
     private Gender gender;
 
     private void calculateSecondaryCharacteristics(){
-        characteristics.put("Appearance", new Characteristic(characteristicRoll.getAppearance()));
+        characteristics.put("Appearance", characteristicRoll.getAppearance());
 
         Characteristic size = new Characteristic(getStrength().getFinalValue()+getConstitution().getFinalValue()) {
             @Override
@@ -259,10 +267,14 @@ public class Character implements Serializable {
             return getDexBonus() + getAgiBonus();
         }
     }
-    private Innitiative innitiative = new Innitiative(getDexterity(),getAgility(),getCategories());
+    private Innitiative innitiative;
 
     public Innitiative getInnitiative() {
         return innitiative;
+    }
+
+    public void calculateAbstractSkills(){
+        innitiative = new Innitiative(getDexterity(),getAgility(),getCategories());
     }
     //endregion
 

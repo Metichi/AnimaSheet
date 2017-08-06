@@ -5,5 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="menuHeader">#6fb4ed</color>
     <color name="menuBack">#ededed</color>
+    <color name="newCharacter">#81c189</color>
 
 </resources>

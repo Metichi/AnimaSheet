@@ -7,16 +7,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import es.metichi.animabeyondfantasy.CharacterSheet.Character;
 
-public class MainActivity extends AppCompatActivity {
+public class SheetActivity extends AppCompatActivity {
     private String[] mSheetTabs;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private Character character;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sheet);
         mSheetTabs = getResources().getStringArray(R.array.sheetTabs);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -24,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.menu_items,mSheetTabs));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerList.addHeaderView(getLayoutInflater().inflate(R.layout.menu_header,null));
+
+        character = (Character) getIntent().getSerializableExtra("CHARACTER");
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener{
@@ -33,7 +37,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void selectItem(int position){
-
     }
-
 }
