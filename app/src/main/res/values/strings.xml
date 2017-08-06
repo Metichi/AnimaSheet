@@ -3,6 +3,7 @@
     <string name="characterCategoryLabel">Categoría</string>
     <string name="characterLevelLabel">Nivel</string>
     <string name="noCharacter">No character</string>
+    <string name="noCategory">Sin categoria</string>
 
     <string name="characteristicRollPick">Seleccione tirada de características</string>
 
