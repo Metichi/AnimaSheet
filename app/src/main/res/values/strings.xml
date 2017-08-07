@@ -11,6 +11,10 @@
     <string name="characterWeightLabel">Peso</string>
     <string name="characterHairColorLabel">Color de pelo</string>
     <string name="characterEyeColorLabel">Color de ojos</string>
+    <string name="characteristicLabel">Característica</string>
+    <string name="characteristicBaseLabel">Base</string>
+    <string name="characteristicBonusLabel">Bono</string>
+    <string name="characteristicFinalLabel">Final</string>
 
     <string name="characteristicRollPick">Seleccione tirada de características</string>
 

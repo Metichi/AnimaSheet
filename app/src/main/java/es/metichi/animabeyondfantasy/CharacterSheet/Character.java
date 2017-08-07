@@ -174,6 +174,9 @@ public class Character implements Serializable {
         return characteristics.get("Perception");
     }
 
+    public Characteristic[] getPrimaryCharacteristics(){
+        return new Characteristic[]{getStrength(),getDexterity(),getAgility(),getConstitution(),getIntelligence(),getPower(),getWill(),getPerception()};
+    }
     public CharacteristicRoll getCharacteristicRoll() {
         return characteristicRoll;
     }

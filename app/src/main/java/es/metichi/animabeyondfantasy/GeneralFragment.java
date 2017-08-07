@@ -12,11 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Character;
+import es.metichi.animabeyondfantasy.CharacterSheet.Characteristic;
 
 
 /**
@@ -33,6 +37,7 @@ public class GeneralFragment extends Fragment {
     private CharacterEditor mListener;
 
     TextView characterName, gender, age, origin, height, weight, hairColor, eyeColor;
+    HashMap<String,TextView[]> characteristics;
 
     public GeneralFragment() {
         // Required empty public constructor
@@ -66,6 +71,7 @@ public class GeneralFragment extends Fragment {
         if (context instanceof CharacterEditor) {
             mListener = (CharacterEditor) context;
             layoutManager = new LinearLayoutManager(context);
+            characteristics = new HashMap<>();
             sheetAdapter = createSheetAdapter(context);
         } else {
             throw new RuntimeException(context.toString()
@@ -81,25 +87,8 @@ public class GeneralFragment extends Fragment {
 
     private SheetAdapter createSheetAdapter(Context context){
         ArrayList<CharacterDisplayBundle> bundles = new ArrayList<>(1);
-        View characterDescription = LayoutInflater.from(context).inflate(R.layout.cdb_character_description,null);
-        characterName = characterDescription.findViewById(R.id.characterName);
-        age = characterDescription.findViewById(R.id.characterAge);
-        origin = characterDescription.findViewById(R.id.characterOrigin);
-        height = characterDescription.findViewById(R.id.characterHeight);
-        weight = characterDescription.findViewById(R.id.characterWeight);
-        hairColor = characterDescription.findViewById(R.id.characterHairColor);
-        eyeColor = characterDescription.findViewById(R.id.characterEyeColor);
-        gender = characterDescription.findViewById(R.id.characterGender);
-        updateCharacterDescription();
-        String title = "Descripcion de personaje";
-        FloatingActionButton.OnClickListener listener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: Que edite los valores mediante un menú
-            }
-        };
-        CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characterDescription,listener);
-        bundles.add(bundle);
+        bundles.add(generateCharacterDescriptionBundle(context));
+        bundles.add(generateCharacteristicBundle(context));
 
         SheetAdapter adapter = new SheetAdapter(bundles);
         return adapter;
@@ -109,6 +98,53 @@ public class GeneralFragment extends Fragment {
         Character getCharacter();
     }
 
+    private CharacterDisplayBundle generateCharacterDescriptionBundle(Context context){
+        View characterDescription = LayoutInflater.from(context).inflate(R.layout.cdb_character_description,null);
+        characterName = characterDescription.findViewById(R.id.characterName);
+        age = characterDescription.findViewById(R.id.characterAge);
+        origin = characterDescription.findViewById(R.id.characterOrigin);
+        height = characterDescription.findViewById(R.id.characterHeight);
+        weight = characterDescription.findViewById(R.id.characterWeight);
+        hairColor = characterDescription.findViewById(R.id.characterHairColor);
+        eyeColor = characterDescription.findViewById(R.id.characterEyeColor);
+        gender = characterDescription.findViewById(R.id.characterGender);
+
+        String title = "Descripcion de personaje";
+        FloatingActionButton.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Que edite los valores mediante un menú
+            }
+        };
+        CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characterDescription,listener);
+        updateCharacterDescription();
+        return bundle;
+    }
+    private CharacterDisplayBundle generateCharacteristicBundle(Context context){
+        String title = "Características";
+        FloatingActionButton.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Este botón te permite redistribuir la tirada de característica
+            }
+        };
+
+        TableLayout characteristicTable = (TableLayout) LayoutInflater.from(context).inflate(R.layout.cdb_characteristics,null);
+        for (Characteristic c : mListener.getCharacter().getPrimaryCharacteristics()){
+            TableRow newRow = (TableRow) LayoutInflater.from(context).inflate(R.layout.cdb_characteristics_emptyrow,null);
+            TextView characteristicName = newRow.findViewById(R.id.characteristicName);
+            TextView characteristicBase = newRow.findViewById(R.id.characteristicBase);
+            TextView characteristicBonus = newRow.findViewById(R.id.characteristicBonus);
+            TextView characteristicFinal = newRow.findViewById(R.id.characteristicFinal);
+            characteristicTable.addView(newRow);
+            TextView[] characteristic = new TextView[] {characteristicName,characteristicBase,characteristicBonus,characteristicFinal};
+            characteristics.put(c.getName(),characteristic);
+        }
+        updateCharacteristics();
+
+        CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characteristicTable,listener);
+        return bundle;
+    }
     private void updateCharacterDescription(){
         Character character = mListener.getCharacter();
         characterName.setText(character.getName());
@@ -119,6 +155,15 @@ public class GeneralFragment extends Fragment {
         hairColor.setText(character.getHairColor());
         eyeColor.setText(character.getEyeColor());
         gender.setText(character.getGender()== Character.Gender.MALE ? "Masculino" : "Femenino");
+    }
+    private void updateCharacteristics(){
+        for (Characteristic c : mListener.getCharacter().getPrimaryCharacteristics()){
+            TextView[] characteristic = characteristics.get(c.getName());
+            characteristic[0].setText(c.getName());
+            characteristic[1].setText(String.valueOf(c.getBase()));
+            characteristic[2].setText(String.valueOf(c.getSkillBonus()));
+            characteristic[3].setText(String.valueOf(c.getFinalValue()));
+        }
     }
 
     private static class SheetAdapter extends RecyclerView.Adapter<SheetAdapter.SheetViewHolder>{
