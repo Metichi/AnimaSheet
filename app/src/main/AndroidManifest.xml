@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".SheetActivity"
+        <activity android:name=".Activity_Sheet"
             android:screenOrientation="portrait" />
-        <activity android:name=".LoadCreateActivity">
+        <activity android:name=".Activity_LoadCreate">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

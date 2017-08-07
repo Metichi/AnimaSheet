@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ListViewCompat;
-import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +15,7 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Character;
 import es.metichi.animabeyondfantasy.CharacterSheet.CharacteristicRoll;
 import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.CharacteristicRollDefinitions;
 
-public class LoadCreateActivity extends AppCompatActivity {
+public class Activity_LoadCreate extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +77,7 @@ public class LoadCreateActivity extends AppCompatActivity {
     }
     private void createCharacter(CharacteristicRoll characteristicRoll){
         Character character = new Character(characteristicRoll);
-        Intent intent = new Intent(this,SheetActivity.class);
+        Intent intent = new Intent(this,Activity_Sheet.class);
         intent.putExtra("CHARACTER",character);
         startActivity(intent);
     }

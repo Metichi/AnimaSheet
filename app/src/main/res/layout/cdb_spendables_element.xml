@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+    <TextView
+        android:id="@+id/spendableName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:layout_row="0"
+        android:text="TextView"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/maxSpendableValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_row="1"
+        android:text="TextView"
+        android:textColor="@android:color/black" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:layout_row="2" />
+
+    <EditText
+        android:id="@+id/currentSpendableValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="1"
+        android:layout_row="1"
+        android:ems="10"
+        android:inputType="numberSigned"
+        android:textSize="14sp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fillProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="2"
+        android:layout_row="1"
+        android:clickable="true"
+        app:backgroundTint="@color/cardview_dark_background"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/ic_menu_upload" />
+</GridLayout>

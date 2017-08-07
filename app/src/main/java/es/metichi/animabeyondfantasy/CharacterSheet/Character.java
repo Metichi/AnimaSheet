@@ -230,8 +230,7 @@ public class Character implements Serializable {
         Characteristic inhumanity = new InhumanityChar();
         characteristics.put(inhumanity.getName(),inhumanity);
         secondaryCharacteristics.put(inhumanity.getName(),inhumanity);
-
-        Characteristic stamina = new Characteristic(1,"Stamina"){
+        Characteristic stamina = new SpendableCharacteristic(1,"Stamina"){
             @Override
             public int getBase(){
                 this.base = getConstitution().getFinalValue();
@@ -579,5 +578,27 @@ public class Character implements Serializable {
         } catch (FileNotFoundException e){return null;}
         catch (IOException e){return null;}
         catch (ClassNotFoundException e){return null;}
+    }
+    //endregion
+
+    //region Subclasses
+    class SpendableCharacteristic extends Characteristic implements Spendable{
+        private int currentValue;
+        public SpendableCharacteristic(int i, String s){super(i,s);
+        currentValue = getMaxValue();}
+        @Override
+        public int getCurrentValue() {
+            return currentValue;
+        }
+
+        @Override
+        public void setCurrentValue(int value) {
+            this.currentValue = value;
+        }
+
+        @Override
+        public int getMaxValue() {
+            return getFinalValue();
+        }
     }
 }

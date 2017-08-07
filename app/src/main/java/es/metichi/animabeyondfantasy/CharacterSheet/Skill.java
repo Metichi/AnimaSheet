@@ -149,7 +149,7 @@ public class Skill implements Modifyable, Serializable{
                 return Math.min(50,super.getCategoryBonus());
             }
         }
-        public static class KiPoint extends CombatSkill{
+        public static class KiPoint extends SpendableCombatSkill{
             public KiPoint(Characteristic characteristic, ArrayList<Category> categories){
                 super(characteristic.getName()+"Ki", characteristic, categories);
             }
@@ -190,15 +190,81 @@ public class Skill implements Modifyable, Serializable{
                 }
             }
         }
+        public static class SpendableCombatSkill extends Skill.CombatSkill implements Spendable{
+            private int currentValue;
+            public SpendableCombatSkill(String s, Characteristic c, ArrayList<Category>categories){
+                super(s,c,categories);
+                currentValue = getMaxValue();
+            }
+
+            @Override
+            public int getMaxValue() {
+                return getFinalValue();
+            }
+
+            @Override
+            public void setCurrentValue(int currentValue) {
+                this.currentValue = currentValue;
+            }
+
+            @Override
+            public int getCurrentValue() {
+                return currentValue;
+            }
+        }
     }
     public static class MysticSkill extends Skill {
         public MysticSkill(String name, Characteristic characteristic, ArrayList<Category> categories){
             super(name, characteristic,categories);
         }
+        public static class SpendableMysticSkill extends MysticSkill implements Spendable{
+            private int currentValue;
+            public SpendableMysticSkill(String s, Characteristic c, ArrayList<Category> cat){
+                super(s,c,cat);
+                currentValue = getMaxValue();
+            }
+
+            @Override
+            public int getMaxValue() {
+                return getFinalValue();
+            }
+
+            @Override
+            public int getCurrentValue() {
+                return currentValue;
+            }
+
+            @Override
+            public void setCurrentValue(int currentValue) {
+                this.currentValue = currentValue;
+            }
+        }
     }
     public static class PsychicSkill extends Skill{
         public PsychicSkill(String name, Characteristic characteristic, ArrayList<Category> categories){
             super(name, characteristic,categories);
+        }
+        public static class SpendablePsychicSkill extends PsychicSkill implements Spendable{
+            private int currentValue;
+            public SpendablePsychicSkill(String s, Characteristic c, ArrayList<Category> cat){
+                super(s,c,cat);
+                currentValue = getMaxValue();
+            }
+
+            @Override
+            public int getMaxValue() {
+                return getFinalValue();
+            }
+
+            @Override
+            public int getCurrentValue() {
+                return currentValue;
+            }
+
+            @Override
+            public void setCurrentValue(int currentValue) {
+                this.currentValue = currentValue;
+            }
         }
     }
     public static class SecondarySkill extends Skill{
@@ -269,6 +335,28 @@ public class Skill implements Modifyable, Serializable{
                 this.setValue(10*innatePoints);
                 return 10*innatePoints;
             }
+        }
+    }
+    public static class SpendableSkill extends Skill implements Spendable{
+        private int currentValue;
+        public SpendableSkill(String s, Characteristic c, ArrayList<Category> cat){
+            super(s,c,cat);
+            currentValue = getMaxValue();
+        }
+
+        @Override
+        public int getMaxValue() {
+            return getFinalValue();
+        }
+
+        @Override
+        public int getCurrentValue() {
+            return currentValue;
+        }
+
+        @Override
+        public void setCurrentValue(int currentValue) {
+            this.currentValue = currentValue;
         }
     }
 }

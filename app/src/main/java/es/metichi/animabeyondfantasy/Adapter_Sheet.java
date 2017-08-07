@@ -14,9 +14,9 @@ import java.util.ArrayList;
  * Created by Metichi on 07/08/2017.
  */
 
-public class SheetAdapter extends RecyclerView.Adapter<SheetAdapter.SheetViewHolder>{
+public class Adapter_Sheet extends RecyclerView.Adapter<Adapter_Sheet.SheetViewHolder>{
     ArrayList<CharacterDisplayBundle> bundles;
-    public SheetAdapter(ArrayList<CharacterDisplayBundle> bundles){
+    public Adapter_Sheet(ArrayList<CharacterDisplayBundle> bundles){
         this.bundles = bundles;
     }
     public static class SheetViewHolder extends RecyclerView.ViewHolder{

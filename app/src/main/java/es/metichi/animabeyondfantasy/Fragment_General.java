@@ -3,7 +3,6 @@ package es.metichi.animabeyondfantasy;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -21,6 +19,7 @@ import java.util.HashMap;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Character;
 import es.metichi.animabeyondfantasy.CharacterSheet.Characteristic;
+import es.metichi.animabeyondfantasy.CharacterSheet.Spendable;
 
 
 /**
@@ -29,15 +28,15 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Characteristic;
  * {@link CharacterEditor} interface
  * to handle interaction events.
  */
-public class GeneralFragment extends Fragment {
-    private SheetAdapter sheetAdapter;
+public class Fragment_General extends Fragment {
+    private Adapter_Sheet sheetAdapter;
     private LinearLayoutManager layoutManager;
     private CharacterEditor mListener;
 
     TextView characterName, gender, age, origin, height, weight, hairColor, eyeColor;
     HashMap<String,TextView[]> characteristics;
 
-    public GeneralFragment() {
+    public Fragment_General() {
         // Required empty public constructor
     }
 
@@ -79,13 +78,14 @@ public class GeneralFragment extends Fragment {
         mListener = null;
     }
 
-    private SheetAdapter createSheetAdapter(Context context){
+    private Adapter_Sheet createSheetAdapter(Context context){
         ArrayList<CharacterDisplayBundle> bundles = new ArrayList<>(1);
         bundles.add(generateCharacterDescriptionBundle(context));
+        bundles.add(generateSpendableBundle(context));
         bundles.add(generatePrimaryCharacteristicBundle(context));
         bundles.add(generateSecondaryCharacteristicBundle(context));
 
-        SheetAdapter adapter = new SheetAdapter(bundles);
+        Adapter_Sheet adapter = new Adapter_Sheet(bundles);
         return adapter;
     }
 
@@ -164,6 +164,26 @@ public class GeneralFragment extends Fragment {
 
         CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characteristicTable,listener);
         return bundle;
+    }
+    private CharacterDisplayBundle generateSpendableBundle(Context context){
+        ArrayList<Spendable> spendables = new ArrayList<>();
+        spendables.add((Spendable) mListener.getCharacter().getHp());
+        spendables.add((Spendable) mListener.getCharacter().getSecondaryCharacteristics().get("Stamina"));
+        Adapter_Spendable adapter = new Adapter_Spendable(spendables);
+        RecyclerView layout = (RecyclerView) LayoutInflater.from(context).inflate(R.layout.cdb_spendables,null);
+        layout.setAdapter(adapter);
+        layout.setLayoutManager(new LinearLayoutManager(context));
+
+        String title = "Consumibles";
+        FloatingActionButton.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Set Consumibles so it doesnt require a FAB
+            }
+        };
+
+        return new CharacterDisplayBundle(title,layout,listener);
+
     }
     private void updateCharacterDescription(){
         Character character = mListener.getCharacter();

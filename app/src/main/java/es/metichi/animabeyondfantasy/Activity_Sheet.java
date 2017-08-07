@@ -7,7 +7,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +21,7 @@ import android.widget.TextView;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Character;
 
-public class SheetActivity extends AppCompatActivity implements GeneralFragment.CharacterEditor {
+public class Activity_Sheet extends AppCompatActivity implements Fragment_General.CharacterEditor {
     private String[] mSheetTabs;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -50,7 +49,7 @@ public class SheetActivity extends AppCompatActivity implements GeneralFragment.
         character = (Character) getIntent().getSerializableExtra("CHARACTER");
         updateHeader();
 
-        Fragment generalFragment = new GeneralFragment();
+        Fragment generalFragment = new Fragment_General();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.content_frame, generalFragment)

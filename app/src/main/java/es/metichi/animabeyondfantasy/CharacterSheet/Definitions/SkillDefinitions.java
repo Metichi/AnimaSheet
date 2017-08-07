@@ -1,9 +1,13 @@
 package es.metichi.animabeyondfantasy.CharacterSheet.Definitions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import es.metichi.animabeyondfantasy.CharacterSheet.Category;
 import es.metichi.animabeyondfantasy.CharacterSheet.Character;
+import es.metichi.animabeyondfantasy.CharacterSheet.Characteristic;
 import es.metichi.animabeyondfantasy.CharacterSheet.Skill;
+import es.metichi.animabeyondfantasy.CharacterSheet.Spendable;
 
 /**
  * Created by Metichi on 03/08/2017.
@@ -31,7 +35,8 @@ public class SkillDefinitions {
         Skill.CombatSkill.KiAcumulation powerAcu = new Skill.CombatSkill.KiAcumulation(character.getPower(),character.getCategories());
         Skill.CombatSkill.KiAcumulation willAcu = new Skill.CombatSkill.KiAcumulation(character.getWill(),character.getCategories());
 
-        Skill.CombatSkill cm = new Skill.CombatSkill("CM", null,character.getCategories()){
+
+        Skill.CombatSkill cm = new Skill.CombatSkill.SpendableCombatSkill("CM", null,character.getCategories()){
             @Override
             public int getBaseValue(){
                 return super.getBaseValue()*5;
@@ -63,7 +68,7 @@ public class SkillDefinitions {
         return combatSkills;
     }
     public static HashMap<String,Skill> generateMysticSkillsFor(Character character){
-        Skill.MysticSkill zeon = new Skill.MysticSkill("Zeon", character.getPower(),character.getCategories()){
+        Skill.MysticSkill zeon = new Skill.MysticSkill.SpendableMysticSkill("Zeon", character.getPower(),character.getCategories()){
             @Override
             public int getCharacteristicBonus(){
                 switch (getCharacteristic().getFinalValue()){
@@ -135,7 +140,7 @@ public class SkillDefinitions {
             }
         };
         Skill.MysticSkill magicProjection = new Skill.MysticSkill("MagicProjection",character.getDexterity(),character.getCategories());
-        Skill.MysticSkill magicLevel = new Skill.MysticSkill("MagicLevel", character.getIntelligence(),character.getCategories()){
+        Skill.MysticSkill magicLevel = new Skill.MysticSkill.SpendableMysticSkill("MagicLevel", character.getIntelligence(),character.getCategories()){
             @Override
             public int getCharacteristicBonus(){
                 int value = getCharacteristic().getFinalValue();
@@ -172,7 +177,7 @@ public class SkillDefinitions {
         return mysticSkills;
     }
     public static HashMap<String,Skill> generatePsychicSkillsFor(Character character){
-        Skill.PsychicSkill cv = new Skill.PsychicSkill("CV", null,character.getCategories());
+        Skill.PsychicSkill cv = new Skill.PsychicSkill.SpendablePsychicSkill("CV", null,character.getCategories());
         Skill.PsychicSkill psychicProjection = new Skill.PsychicSkill("PsychicProjection",character.getDexterity(),character.getCategories());
 
         HashMap<String,Skill> psychicSkills = new HashMap<>(2);
@@ -276,7 +281,7 @@ public class SkillDefinitions {
         return secondarySkills;
     }
     public static Skill generateHealthFor(Character character){
-        Skill health = new Skill("HP",character.getConstitution(),character.getCategories()){
+        Skill health = new Skill.SpendableSkill("HP",character.getConstitution(),character.getCategories()){
             @Override
             public int getBaseValue(){
                 return super.getBaseValue()*characteristic.getFinalValue()+20;
