@@ -28,8 +28,6 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Characteristic;
  * Activities that contain this fragment must implement the
  * {@link CharacterEditor} interface
  * to handle interaction events.
- * Use the {@link GeneralFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class GeneralFragment extends Fragment {
     private SheetAdapter sheetAdapter;
@@ -41,11 +39,6 @@ public class GeneralFragment extends Fragment {
 
     public GeneralFragment() {
         // Required empty public constructor
-    }
-
-    public static GeneralFragment newInstance() {
-        GeneralFragment fragment = new GeneralFragment();
-        return fragment;
     }
 
     @Override
@@ -203,45 +196,5 @@ public class GeneralFragment extends Fragment {
     private void updateCharacteristics(){
         updatePrimaryCharacteristics();
         updateSecondaryCharacteristics();
-    }
-
-    private static class SheetAdapter extends RecyclerView.Adapter<SheetAdapter.SheetViewHolder>{
-        ArrayList<CharacterDisplayBundle> bundles;
-        public SheetAdapter(ArrayList<CharacterDisplayBundle> bundles){
-            this.bundles = bundles;
-        }
-        public static class SheetViewHolder extends RecyclerView.ViewHolder{
-            private ConstraintLayout card;
-            public TextView title;
-            public FloatingActionButton button;
-            public FrameLayout frame;
-            public SheetViewHolder(ConstraintLayout v){
-                super(v);
-                card = v;
-                title = v.findViewById(R.id.cardHeader);
-                button = v.findViewById(R.id.cardButton);
-                frame = v.findViewById(R.id.cardFrame);
-            }
-        }
-
-        @Override
-        public SheetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            ConstraintLayout v = (ConstraintLayout) LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.infowindow_frame,parent,false);
-            return new SheetViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(SheetViewHolder holder, int position) {
-            CharacterDisplayBundle bundle = bundles.get(position);
-            holder.title.setText(bundle.getTitle());
-            holder.button.setOnClickListener(bundle.getOnClickListener());
-            holder.frame.addView(bundle.getLayout());
-        }
-
-        @Override
-        public int getItemCount() {
-            return bundles.size();
-        }
     }
 }
