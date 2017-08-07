@@ -2,8 +2,8 @@ package es.metichi.animabeyondfantasy;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.solver.widgets.ConstraintAnchor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -73,6 +73,7 @@ public class GeneralFragment extends Fragment {
             layoutManager = new LinearLayoutManager(context);
             characteristics = new HashMap<>();
             sheetAdapter = createSheetAdapter(context);
+            mListener.setTitle(R.string.generalFragementTitle);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement CharacterEditor");
@@ -88,7 +89,8 @@ public class GeneralFragment extends Fragment {
     private SheetAdapter createSheetAdapter(Context context){
         ArrayList<CharacterDisplayBundle> bundles = new ArrayList<>(1);
         bundles.add(generateCharacterDescriptionBundle(context));
-        bundles.add(generateCharacteristicBundle(context));
+        bundles.add(generatePrimaryCharacteristicBundle(context));
+        bundles.add(generateSecondaryCharacteristicBundle(context));
 
         SheetAdapter adapter = new SheetAdapter(bundles);
         return adapter;
@@ -96,6 +98,7 @@ public class GeneralFragment extends Fragment {
 
     public interface CharacterEditor {
         Character getCharacter();
+        void setTitle(@StringRes int res);
     }
 
     private CharacterDisplayBundle generateCharacterDescriptionBundle(Context context){
@@ -120,7 +123,7 @@ public class GeneralFragment extends Fragment {
         updateCharacterDescription();
         return bundle;
     }
-    private CharacterDisplayBundle generateCharacteristicBundle(Context context){
+    private CharacterDisplayBundle generatePrimaryCharacteristicBundle(Context context){
         String title = "Características";
         FloatingActionButton.OnClickListener listener = new View.OnClickListener() {
             @Override
@@ -140,7 +143,31 @@ public class GeneralFragment extends Fragment {
             TextView[] characteristic = new TextView[] {characteristicName,characteristicBase,characteristicBonus,characteristicFinal};
             characteristics.put(c.getName(),characteristic);
         }
-        updateCharacteristics();
+        updatePrimaryCharacteristics();
+
+        CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characteristicTable,listener);
+        return bundle;
+    }
+    private CharacterDisplayBundle generateSecondaryCharacteristicBundle(Context context){
+        String title = "Características secundarias";
+        FloatingActionButton.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Este botón te permite redistribuir la tirada de característica
+            }
+        };
+
+        TableLayout characteristicTable = (TableLayout) LayoutInflater.from(context).inflate(R.layout.cdb_secondary_characteristics,null);
+        for (String key : mListener.getCharacter().getSecondaryCharacteristics().keySet()){
+            Characteristic c = mListener.getCharacter().getSecondaryCharacteristics().get(key);
+            TableRow newRow = (TableRow) LayoutInflater.from(context).inflate(R.layout.cdb_secondary_characteristics_emptyrow,null);
+            TextView characteristicName = newRow.findViewById(R.id.characteristicName);
+            TextView characteristicFinal = newRow.findViewById(R.id.characteristicFinal);
+            characteristicTable.addView(newRow);
+            TextView[] characteristic = new TextView[] {characteristicName,characteristicFinal};
+            characteristics.put(c.getName(),characteristic);
+        }
+        updateSecondaryCharacteristics();
 
         CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characteristicTable,listener);
         return bundle;
@@ -156,7 +183,7 @@ public class GeneralFragment extends Fragment {
         eyeColor.setText(character.getEyeColor());
         gender.setText(character.getGender()== Character.Gender.MALE ? "Masculino" : "Femenino");
     }
-    private void updateCharacteristics(){
+    private void updatePrimaryCharacteristics(){
         for (Characteristic c : mListener.getCharacter().getPrimaryCharacteristics()){
             TextView[] characteristic = characteristics.get(c.getName());
             characteristic[0].setText(c.getName());
@@ -164,6 +191,18 @@ public class GeneralFragment extends Fragment {
             characteristic[2].setText(String.valueOf(c.getSkillBonus()));
             characteristic[3].setText(String.valueOf(c.getFinalValue()));
         }
+    }
+    private void updateSecondaryCharacteristics(){
+        for (String key : mListener.getCharacter().getSecondaryCharacteristics().keySet()){
+            Characteristic c = mListener.getCharacter().getSecondaryCharacteristics().get(key);
+            TextView[] characteristic = characteristics.get(c.getName());
+            characteristic[0].setText(c.getName());
+            characteristic[1].setText(String.valueOf(c.getFinalValue()));
+        }
+    }
+    private void updateCharacteristics(){
+        updatePrimaryCharacteristics();
+        updateSecondaryCharacteristics();
     }
 
     private static class SheetAdapter extends RecyclerView.Adapter<SheetAdapter.SheetViewHolder>{

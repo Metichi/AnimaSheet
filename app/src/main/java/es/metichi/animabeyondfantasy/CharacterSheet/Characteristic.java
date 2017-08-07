@@ -36,8 +36,8 @@ public class Characteristic implements Modifyable, Serializable {
         return v;
     }
     public int getFinalValue(){
-        int v = base;
-        if(modifiers.size()>0) {
+        int v = getBase();
+        if(!modifiers.isEmpty()) {
             for (Modifier m : modifiers) {
                 v += m.getValue();
             }

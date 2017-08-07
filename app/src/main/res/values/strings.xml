@@ -17,6 +17,12 @@
     <string name="characteristicFinalLabel">Final</string>
 
     <string name="characteristicRollPick">Seleccione tirada de características</string>
+    <string name="drawer_open">Abrir menu</string>
+    <string name="drawer_close">Cerrar menu</string>
+    <string name="generalFragementTitle">General</string>
+
+    <string name="exitSheetWarningTitle">Salir de la ficha</string>
+    <string name="exitSheetWarning">Asegurate de haber guardado la ficha antes de salir</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
