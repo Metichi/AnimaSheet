@@ -14,10 +14,10 @@ public class Characteristic implements Modifyable, Serializable {
     protected int base;
     protected ArrayList<Modifier> modifiers;
 
-    public Characteristic(int base){
+    public Characteristic(int base, String name){
         this.base = base;
         modifiers = new ArrayList<>(0);
-        name = "Null";
+        this.name = name;
     }
 
     public int getBase() {
@@ -80,8 +80,8 @@ public class Characteristic implements Modifyable, Serializable {
     public static class PhysicalCharacteristic extends Characteristic{
         public static int humanLimit = 10;
         public static int inhumanLimit = 13;
-        public PhysicalCharacteristic(int v){
-            super(v);
+        public PhysicalCharacteristic(int v,String n){
+            super(v,n);
         }
         @Override
         public boolean isPhysical() {
@@ -102,8 +102,8 @@ public class Characteristic implements Modifyable, Serializable {
         }
     }
     public static class IntellectualCharacteristic extends Characteristic{
-        public IntellectualCharacteristic(int v){
-            super(v);
+        public IntellectualCharacteristic(int v,String n){
+            super(v,n);
         }
     }
 

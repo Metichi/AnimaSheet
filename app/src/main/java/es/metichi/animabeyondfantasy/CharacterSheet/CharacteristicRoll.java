@@ -18,25 +18,16 @@ public abstract class CharacteristicRoll implements Serializable {
     }
 
     protected void createCharacteristics(){
-        strength = new Characteristic.PhysicalCharacteristic(5);
-        dexterity = new Characteristic.PhysicalCharacteristic(5);
-        constitution = new Characteristic.PhysicalCharacteristic(5);
-        agility = new Characteristic.PhysicalCharacteristic(5);
-        intelligence = new Characteristic.IntellectualCharacteristic(5);
-        power = new Characteristic.IntellectualCharacteristic(5);
-        will = new Characteristic.IntellectualCharacteristic(5);
-        perception = new Characteristic.IntellectualCharacteristic(5);
-        appearance = new Characteristic(5);
+        strength = new Characteristic.PhysicalCharacteristic(1,"Strength");
+        dexterity = new Characteristic.PhysicalCharacteristic(2,"Dexterity");
+        constitution = new Characteristic.PhysicalCharacteristic(3,"Constitution");
+        agility = new Characteristic.PhysicalCharacteristic(4,"Agility");
+        intelligence = new Characteristic.IntellectualCharacteristic(5,"Intelligence");
+        power = new Characteristic.IntellectualCharacteristic(6,"Power");
+        will = new Characteristic.IntellectualCharacteristic(8,"Will");
+        perception = new Characteristic.IntellectualCharacteristic(10,"Perception");
+        appearance = new Characteristic(5,"Appearance");
         socialClass = 50;
-        strength.setName("Strength");
-        dexterity.setName("Dexterity");
-        constitution.setName("Constitution");
-        agility.setName("Agility");
-        intelligence.setName("Intelligence");
-        power.setName("Power");
-        will.setName("Will");
-        perception.setName("Perception");
-        appearance.setName("Appearance");
     }
 
     public abstract String getName();

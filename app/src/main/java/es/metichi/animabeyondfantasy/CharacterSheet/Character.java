@@ -21,7 +21,6 @@ import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.SkillDefinitions
  */
 public class Character implements Serializable {
 
-    public enum Inhumanity{HUMAN, INHUMAN, ZEN}
     private static final long serialVersionUID = 88L;
 
     public Character(CharacteristicRoll roll){
@@ -187,11 +186,38 @@ public class Character implements Serializable {
 
     public enum Gender{MALE, FEMALE}
     private Gender gender;
+    private HashMap<String,Characteristic> secondaryCharacteristics;
+    public enum Inhumanity{HUMAN, INHUMAN, ZEN}
+    private class InhumanityChar extends Characteristic{
+        public InhumanityChar() {
+            super(1,"Inhumanity");
+        }
+        @Override
+        public int getBase(){
+            this.setBase(1);
+            if(!getModifiers().isEmpty()) {
+                for (Modifier m : getModifiers()) {
+                    this.setBase(Math.max(base, m.getValue()));
+                }
+            }
+            return this.base;
+        }
+
+        public Inhumanity getLevel(){
+            switch (getBase()){
+                case 1: return Inhumanity.HUMAN;
+                case 2: return Inhumanity.INHUMAN;
+                default: return Inhumanity.ZEN;
+            }
+        }
+    }
 
     private void calculateSecondaryCharacteristics(){
+        secondaryCharacteristics = new HashMap<>();
         characteristics.put("Appearance", characteristicRoll.getAppearance());
+        secondaryCharacteristics.put(characteristicRoll.getAppearance().getName(),characteristicRoll.getAppearance());
 
-        Characteristic size = new Characteristic(getStrength().getFinalValue()+getConstitution().getFinalValue()) {
+        Characteristic size = new Characteristic(getStrength().getFinalValue()+getConstitution().getFinalValue(),"Size") {
             @Override
             public int getFinalValue(){
                 this.base = getStrength().getFinalValue() + getConstitution().getFinalValue();
@@ -199,8 +225,34 @@ public class Character implements Serializable {
             }
         };
         characteristics.put("Size", size);
+        secondaryCharacteristics.put(size.getName(),size);
+
+        Characteristic inhumanity = new InhumanityChar();
+        characteristics.put(inhumanity.getName(),inhumanity);
+        secondaryCharacteristics.put(inhumanity.getName(),inhumanity);
+
+        Characteristic stamina = new Characteristic(1,"Stamina"){
+            @Override
+            public int getBase(){
+                this.base = getConstitution().getFinalValue();
+                return this.base;
+            }
+        };
+        characteristics.put(stamina.getName(),stamina);
+        secondaryCharacteristics.put(stamina.getName(),stamina);
+
+        Characteristic speed = new Characteristic(1,"Speed"){
+            @Override
+            public int getBase(){
+                this.base = getAgility().getUsable(getInhumanityLevel());
+                return this.base;
+            }
+        };
+        characteristics.put(speed.getName(),speed);
+        secondaryCharacteristics.put(speed.getName(),speed);
     }
 
+    public Inhumanity getInhumanityLevel(){return ((InhumanityChar)characteristics.get("Inhumanity")).getLevel();}
     public Characteristic getSize() {
         return characteristics.get("Size");
     }
@@ -225,6 +277,11 @@ public class Character implements Serializable {
             this.remove(ModifierDefinitions.genderSizeModifier);
         }
     }
+
+    public HashMap<String, Characteristic> getSecondaryCharacteristics() {
+        return secondaryCharacteristics;
+    }
+
     //endregion
 
     //region Race
