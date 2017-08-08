@@ -20,7 +20,7 @@ public abstract class CharacteristicRoll implements Serializable {
     protected void createCharacteristics(){
         strength = new Characteristic.PhysicalCharacteristic(1,"Strength");
         dexterity = new Characteristic.PhysicalCharacteristic(2,"Dexterity");
-        constitution = new Characteristic.PhysicalCharacteristic(3,"Constitution");
+        constitution = new Characteristic.PhysicalCharacteristic(10,"Constitution");
         agility = new Characteristic.PhysicalCharacteristic(4,"Agility");
         intelligence = new Characteristic.IntellectualCharacteristic(5,"Intelligence");
         power = new Characteristic.IntellectualCharacteristic(6,"Power");

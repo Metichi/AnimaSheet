@@ -284,7 +284,7 @@ public class SkillDefinitions {
         Skill health = new Skill.SpendableSkill("HP",character.getConstitution(),character.getCategories()){
             @Override
             public int getBaseValue(){
-                return super.getBaseValue()*characteristic.getFinalValue()+20;
+                return (super.getBaseValue()+1)*characteristic.getFinalValue()*10+20;
             }
         };
         return health;

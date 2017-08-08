@@ -4,6 +4,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -45,7 +46,11 @@ public class Adapter_Sheet extends RecyclerView.Adapter<Adapter_Sheet.SheetViewH
         CharacterDisplayBundle bundle = bundles.get(position);
         holder.title.setText(bundle.getTitle());
         holder.button.setOnClickListener(bundle.getOnClickListener());
+        if(bundle.getLayout().getParent()!= null){
+            ((ViewGroup)bundle.getLayout().getParent()).removeView(bundle.getLayout());
+        }
         holder.frame.addView(bundle.getLayout());
+        if(bundle.getHideButton()){holder.button.setVisibility(View.INVISIBLE);}
     }
 
     @Override

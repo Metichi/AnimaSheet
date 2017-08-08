@@ -19,9 +19,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import es.metichi.animabeyondfantasy.CharacterSheet.Character;
 
-public class Activity_Sheet extends AppCompatActivity implements Fragment_General.CharacterEditor {
+public class Activity_Sheet extends AppCompatActivity implements CharacterEditor {
     private String[] mSheetTabs;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -29,6 +31,7 @@ public class Activity_Sheet extends AppCompatActivity implements Fragment_Genera
     private Character character;
     private ActionBarDrawerToggle mDrawerToggle;
     private Toolbar mToolbar;
+    private HashMap<Integer,Fragment> fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,11 @@ public class Activity_Sheet extends AppCompatActivity implements Fragment_Genera
         character = (Character) getIntent().getSerializableExtra("CHARACTER");
         updateHeader();
 
-        Fragment generalFragment = new Fragment_General();
+        fragments = new HashMap<>();
+        fragments.put(1,new Fragment_General());
+        fragments.put(6,new Fragment_Secondary_Skill());
+
+        Fragment generalFragment = fragments.get(1);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.content_frame, generalFragment)
@@ -66,6 +73,14 @@ public class Activity_Sheet extends AppCompatActivity implements Fragment_Genera
         }
     }
     private void selectItem(int position){
+        if(fragments.containsKey(position)){
+            Fragment f = fragments.get(position);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content_frame,f)
+                    .commit();
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 
     public void updateHeader(){

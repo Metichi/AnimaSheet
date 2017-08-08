@@ -52,10 +52,24 @@ public class Skill implements Modifyable, Serializable{
         return name;
     }
 
+    public int getTotalDPInvested(){
+        int dpCount = 0;
+        if(!categories.isEmpty()){
+            for (Category c : categories){
+                dpCount += c.getDPInvestedOn(this);
+            }
+        }
+        return dpCount;
+    }
+    public int getUpperLimit(){
+        return 9999999;
+    }
     public int getBaseValue(){
         int baseValue = 0;
-        for (Category category : categories){
-            baseValue += category.getDPInvestedOn(this)/category.getCostOf(this);
+        if(!categories.isEmpty()) {
+            for (Category category : categories) {
+                baseValue += category.getDPInvestedOn(this) / category.getCostOf(this);
+            }
         }
         return baseValue;
     }
@@ -83,13 +97,21 @@ public class Skill implements Modifyable, Serializable{
     public int getSpecialBonus(){
         int bonus = 0;
         for(Modifier modifier : modifiers){
-            bonus += modifier.getValue();
+            if(!(modifier instanceof Category.CategoryModifier)
+                    && !(modifier instanceof NaturalModifier)
+                    && !(modifier instanceof SecondarySkill.InnateModifier)) {
+                bonus += modifier.getValue();
+            }
         }
         return bonus;
     }
 
     public int getFinalValue(){
-        return getBaseValue() + getNaturalBonus() + getCategoryBonus() + getSpecialBonus();
+        int base = getBaseValue();
+        base += getNaturalBonus();
+        base += getCategoryBonus();
+        base += getSpecialBonus();
+        return base;
     }
 
 
@@ -293,6 +315,15 @@ public class Skill implements Modifyable, Serializable{
             naturalBonusPoints = 0;
         }
 
+        @Override
+        public int getBaseValue() {
+            int count = super.getBaseValue();
+            if(getTotalDPInvested() == 0){
+                count -= 30;
+            }
+            return count;
+        }
+
         public int getNaturalBonusPoints() {
             return naturalBonusPoints;
         }
@@ -337,6 +368,12 @@ public class Skill implements Modifyable, Serializable{
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return getName()+String.valueOf(getFinalValue());
+    }
+
     public static class SpendableSkill extends Skill implements Spendable{
         private int currentValue;
         public SpendableSkill(String s, Characteristic c, ArrayList<Category> cat){

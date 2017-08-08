@@ -20,9 +20,21 @@
     <string name="drawer_open">Abrir menu</string>
     <string name="drawer_close">Cerrar menu</string>
     <string name="generalFragementTitle">General</string>
+    <string name="secundaryFragmentTitle">Secundarias</string>
 
     <string name="exitSheetWarningTitle">Salir de la ficha</string>
     <string name="exitSheetWarning">Asegurate de haber guardado la ficha antes de salir</string>
+
+
+    <string name="strength">Fuerza</string>
+    <string name="dexterity">Destreza</string>
+    <string name="agility">Agilidad</string>
+    <string name="constitution">Constitución</string>
+    <string name="intelligence">Inteligencia</string>
+    <string name="perception">Percepción</string>
+    <string name="will">Voluntad</string>
+    <string name="power">Poder</string>
+    <string name="appearance">Apariencia</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

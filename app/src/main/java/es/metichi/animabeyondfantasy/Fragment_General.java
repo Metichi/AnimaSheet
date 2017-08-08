@@ -32,6 +32,7 @@ public class Fragment_General extends Fragment {
     private Adapter_Sheet sheetAdapter;
     private LinearLayoutManager layoutManager;
     private CharacterEditor mListener;
+    private RecyclerView fragmentList;
 
     TextView characterName, gender, age, origin, height, weight, hairColor, eyeColor;
     HashMap<String,TextView[]> characteristics;
@@ -50,11 +51,17 @@ public class Fragment_General extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_general, container, false);
-        RecyclerView fragmentList = fragmentView.findViewById(R.id.general_fragment_list);
+        fragmentList = fragmentView.findViewById(R.id.general_fragment_list);
         fragmentList.setHasFixedSize(true);
         fragmentList.setLayoutManager(layoutManager);
         fragmentList.setAdapter(sheetAdapter);
         return fragmentView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        fragmentList.removeAllViews();
     }
 
     @Override
@@ -89,10 +96,7 @@ public class Fragment_General extends Fragment {
         return adapter;
     }
 
-    public interface CharacterEditor {
-        Character getCharacter();
-        void setTitle(@StringRes int res);
-    }
+
 
     private CharacterDisplayBundle generateCharacterDescriptionBundle(Context context){
         View characterDescription = LayoutInflater.from(context).inflate(R.layout.cdb_character_description,null);
@@ -162,7 +166,7 @@ public class Fragment_General extends Fragment {
         }
         updateSecondaryCharacteristics();
 
-        CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characteristicTable,listener);
+        CharacterDisplayBundle bundle = new CharacterDisplayBundle(title,characteristicTable,listener,true);
         return bundle;
     }
     private CharacterDisplayBundle generateSpendableBundle(Context context){
@@ -182,7 +186,7 @@ public class Fragment_General extends Fragment {
             }
         };
 
-        return new CharacterDisplayBundle(title,layout,listener);
+        return new CharacterDisplayBundle(title,layout,listener,true);
 
     }
     private void updateCharacterDescription(){
