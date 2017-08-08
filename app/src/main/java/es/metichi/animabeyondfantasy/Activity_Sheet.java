@@ -54,7 +54,15 @@ public class Activity_Sheet extends AppCompatActivity implements CharacterEditor
 
         fragments = new HashMap<>();
         fragments.put(1,new Fragment_General());
-        fragments.put(6,new Fragment_Secondary_Skill());
+        fragments.put(2,new Fragment_Background());
+        fragments.put(3,new Fragment_Combat());
+        fragments.put(4,new Fragment_Ki());
+        fragments.put(5,new Fragment_Magic());
+        fragments.put(6,new Fragment_Psychic());
+        fragments.put(7,new Fragment_Secondary_Skill());
+        fragments.put(8,new Fragment_dp());
+        fragments.put(9,new Fragment_Inventory());
+        fragments.put(10,new Fragment_Notes());
 
         Fragment generalFragment = fragments.get(1);
         FragmentManager fragmentManager = getSupportFragmentManager();

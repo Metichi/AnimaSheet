@@ -59,12 +59,6 @@ public class Fragment_General extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        fragmentList.removeAllViews();
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof CharacterEditor) {
@@ -182,7 +176,6 @@ public class Fragment_General extends Fragment {
         FloatingActionButton.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Set Consumibles so it doesnt require a FAB
             }
         };
 

@@ -56,10 +56,7 @@ public class Character implements Serializable {
         mysticSkills = SkillDefinitions.generateMysticSkillsFor(this);
         psychicSkill = SkillDefinitions.generatePsychicSkillsFor(this);
         secondarySkills = SkillDefinitions.generateSecondarySkillsFor(this);
-        hp = SkillDefinitions.generateHealthFor(this);
-
-        //Abstract Skills
-        calculateAbstractSkills();
+        abstractSkills = calculateAbstractSkills();
 
         //Fluff
         setName("Unnamed");
@@ -352,16 +349,9 @@ public class Character implements Serializable {
     //region Abstract Skills
     private Skill hp;
     public Skill getHp() {
-        return hp;
+        return abstractSkills.get("HP");
     }
-    private int currentHp;
-    public int getCurrentHp() {
-        return currentHp;
-    }
-    public void setCurrentHp(int currentHp) {
-        this.currentHp = currentHp;
-    }
-    public void healToMax(){this.currentHp = hp.getFinalValue();}
+    HashMap<String,Skill> abstractSkills;
 
     public class Innitiative extends Skill{
         Characteristic dexterity;
@@ -387,28 +377,43 @@ public class Character implements Serializable {
             return getDexBonus() + getAgiBonus();
         }
     }
-    private Innitiative innitiative;
 
     public Innitiative getInnitiative() {
-        return innitiative;
+        return (Innitiative) abstractSkills.get("Innitiative");
     }
 
-    public void calculateAbstractSkills(){
-        innitiative = new Innitiative(getDexterity(),getAgility(),getCategories());
+    public HashMap<String,Skill> calculateAbstractSkills(){
+        HashMap<String,Skill> abstractSkills = new HashMap<>();
+        Skill innitiative = new Innitiative(getDexterity(),getAgility(),getCategories());
+        abstractSkills.put(innitiative.getName(),innitiative);
+        Skill hp = SkillDefinitions.generateHealthFor(this);
+        abstractSkills.put(hp.getName(),hp);
+        return abstractSkills;
     }
     //endregion
 
     //region Psychic skills
     HashMap<String,Skill> psychicSkill;
+
+    public HashMap<String, Skill> getPsychicSkill() {
+        return psychicSkill;
+    }
     //endregion
 
     //region Mystic skills
     HashMap<String,Skill> mysticSkills;
+
+    public HashMap<String, Skill> getMysticSkills() {
+        return mysticSkills;
+    }
     //endregion
 
     //region Secondary skills
     private HashMap<String,Skill> secondarySkills;
 
+    public HashMap<String, Skill> getSecondarySkills() {
+        return secondarySkills;
+    }
     //endregion
 
     // region Getter and Setter
@@ -418,9 +423,7 @@ public class Character implements Serializable {
         allSkills.putAll(psychicSkill);
         allSkills.putAll(mysticSkills);
         allSkills.putAll(secondarySkills);
-        allSkills.put(hp.getName(),hp);
-        allSkills.put(innitiative.getName(),innitiative);
-
+        allSkills.putAll(abstractSkills);
         return allSkills;
     }
     //endregion

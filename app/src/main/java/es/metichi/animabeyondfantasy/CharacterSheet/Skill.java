@@ -292,6 +292,7 @@ public class Skill implements Modifyable, Serializable{
     public static class SecondarySkill extends Skill{
         private NaturalModifier naturalModifier;
         private InnateModifier innateModifier;
+        private UndevelopedModifier undevelopedModifier;
         int naturalBonusPoints;
         int innatePoints;
         public enum SecondarySkillType{
@@ -310,18 +311,11 @@ public class Skill implements Modifyable, Serializable{
             naturalModifier = new NaturalModifier();
             naturalModifier.setDescription("Un modifcador natural suma el bono de característica");
             innateModifier = new InnateModifier();
+            undevelopedModifier = new UndevelopedModifier(-30,0);
+            modifiers.add(undevelopedModifier);
             modifiers.add(naturalModifier);
             modifiers.add(innateModifier);
             naturalBonusPoints = 0;
-        }
-
-        @Override
-        public int getBaseValue() {
-            int count = super.getBaseValue();
-            if(getTotalDPInvested() == 0){
-                count -= 30;
-            }
-            return count;
         }
 
         public int getNaturalBonusPoints() {
@@ -365,6 +359,31 @@ public class Skill implements Modifyable, Serializable{
             public int getValue(){
                 this.setValue(10*innatePoints);
                 return 10*innatePoints;
+            }
+        }
+        public class UndevelopedModifier extends Modifier{
+            int noDP;
+            int yesDP;
+            public UndevelopedModifier(int valueWithNoDP,int valueWithDP){
+                super(0,"Bonificador de puntos de desarrollo", "Se aplican modificadores a habilidades secundarias dependiendo de si se han invertido pds en ellas", new String[0]);
+                noDP = valueWithNoDP;
+                yesDP = valueWithDP;
+            }
+
+            public void setValueWithNoDP(int v){
+                noDP = v;
+            }
+            public void setValueWithDP(int v){
+                yesDP = v;
+            }
+
+            @Override
+            public int getValue(){
+                if(getTotalDPInvested()==0){
+                    return noDP;
+                } else {
+                    return yesDP;
+                }
             }
         }
     }

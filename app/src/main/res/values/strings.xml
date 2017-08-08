@@ -43,9 +43,13 @@
         <item>General</item>
         <item>Transfondo</item>
         <item>Combate</item>
+        <item>Ki</item>
         <item>Magia</item>
         <item>Psíquico</item>
         <item>Secundarias</item>
+        <item>PD</item>
+        <item>Inventory</item>
+        <item>Notas</item>
     </string-array>
     <string-array name="characteristicRolls">
         <item>Custom Roll</item>
