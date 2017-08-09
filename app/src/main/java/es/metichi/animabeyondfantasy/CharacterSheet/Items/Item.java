@@ -6,16 +6,29 @@ package es.metichi.animabeyondfantasy.CharacterSheet.Items;
 
 public class Item {
     protected String name;
+    protected String description;
     protected float weight;
     protected float value;
     protected int quality;
     protected int presence;
+    public enum Aviability{
+        COMMON,
+        UNCOMMON,
+        RARE
+    }
+    protected Aviability aviability;
 
-    public Item(String name, float weight, float value, int quality){
+    public Item(String name, String description, float weight, float value, int quality){
         this.name = name;
+        this.description = description;
         this.weight = weight;
         this.value = value;
         this.quality = quality;
+        this.aviability = Aviability.COMMON;
+    }
+    public Item(String name, String description, float weight, float value, int quality, Aviability aviability){
+        this(name,description,weight,value,quality);
+        this.aviability = aviability;
     }
 
     public void setName(String name) {
@@ -50,9 +63,13 @@ public class Item {
         return quality;
     }
 
+    public int getPresence() {
+        return presence;
+    }
+
     public static class Weapon extends Item{
-        public Weapon(String name, float weight, float value, int quality){
-            super(name, weight, value, quality);
+        public Weapon(String name, String description, float weight, float value, int quality){
+            super(name,description, weight, value, quality);
         }
         //TODO: Complete weapon class.
     }
