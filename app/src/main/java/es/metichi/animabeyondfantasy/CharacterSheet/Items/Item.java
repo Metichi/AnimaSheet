@@ -1,5 +1,11 @@
 package es.metichi.animabeyondfantasy.CharacterSheet.Items;
 
+import java.util.ArrayList;
+
+import es.metichi.animabeyondfantasy.CharacterSheet.Character;
+import es.metichi.animabeyondfantasy.CharacterSheet.Combat;
+import es.metichi.animabeyondfantasy.CharacterSheet.Power;
+
 /**
  * Created by Metichi on 01/08/2017.
  */
@@ -17,6 +23,8 @@ public class Item {
         RARE
     }
     protected Aviability aviability;
+    protected ArrayList<Power> powers;
+    boolean equiped;
 
     public Item(String name, String description, float weight, Currency value, int quality){
         this.name = name;
@@ -25,12 +33,19 @@ public class Item {
         this.value = value;
         this.quality = quality;
         this.aviability = Aviability.COMMON;
+        this.powers = new ArrayList<>();
+        this.equiped = false;
+        this.presence = 0;
     }
     public Item(String name, String description, float weight, Currency value, int quality, Aviability aviability){
         this(name,description,weight,value,quality);
         this.aviability = aviability;
     }
 
+    public Item(String name, String description, float weight, Currency value, int quality, ArrayList<Power> powers){
+        this(name,description,weight,value,quality);
+        this.powers = powers;
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -67,11 +82,24 @@ public class Item {
         return presence;
     }
 
-    public static class Weapon extends Item{
-        public Weapon(String name, String description, float weight, Currency value, int quality){
-            super(name,description, weight, value, quality);
+    public ArrayList<Power> getPowers() {
+        return powers;
+    }
+
+    public void equipOn(Character character){
+        if(!equiped) {
+            for (Power p : getPowers()) {
+                character.give(p);
+            }
         }
-        //TODO: Complete weapon class.
+    }
+
+    public void removeFrom(Character character){
+        if(equiped){
+            for(Power p : getPowers()){
+                character.remove(p);
+            }
+        }
     }
 
     /**
@@ -111,8 +139,30 @@ public class Item {
             this.goldPieces += c;
         }
 
+        public void removeCopperPieces(int c){
+            this.copperPieces -= c;
+            while (this.copperPieces <0){
+                removeSilverPieces(1);
+                this.copperPieces += 10;
+            }
+        }
+        public void removeSilverPieces(int c){
+            this.silverPieces -= c;
+            while(this.silverPieces < 0){
+                removeGoldPieces(1);
+                this.silverPieces += 100;
+            }
+        }
+        public void removeGoldPieces(int c){
+            this.goldPieces-=c;
+        }
+
         public int getCopperPieces() {
-            return copperPieces;
+            if(goldPieces >= 0) {
+                return copperPieces;
+            } else {
+                return copperPieces - 10;
+            }
         }
 
         public int getGoldPieces() {
@@ -120,7 +170,11 @@ public class Item {
         }
 
         public int getSilverPieces() {
-            return silverPieces;
+            if(goldPieces >= 0) {
+                return silverPieces;
+            } else {
+                return silverPieces - 100;
+            }
         }
 
         public void setCopperPieces(int copperPieces) {
@@ -157,9 +211,9 @@ public class Item {
             addGoldPieces(c.getGoldPieces());
         }
         public void remove(Currency c){
-            addCopperPieces(-c.getCopperPieces());
-            addSilverPieces(-c.getSilverPieces());
-            addGoldPieces(-c.getGoldPieces());
+            removeCopperPieces(c.getCopperPieces());
+            removeSilverPieces(c.getSilverPieces());
+            removeGoldPieces(c.getGoldPieces());
         }
 
         @Override

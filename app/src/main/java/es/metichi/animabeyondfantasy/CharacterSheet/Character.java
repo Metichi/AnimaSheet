@@ -13,6 +13,8 @@ import java.util.HashMap;
 
 import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.ModifierDefinitions;
 import es.metichi.animabeyondfantasy.CharacterSheet.Definitions.SkillDefinitions;
+import es.metichi.animabeyondfantasy.CharacterSheet.Items.Item;
+
 /**
  * Character sheet
  *
@@ -416,6 +418,9 @@ public class Character implements Serializable {
     }
     //endregion
 
+    //region Inventory
+    //endregion
+
     // region Getter and Setter
     public HashMap<String,Skill> getAllSkills(){
         HashMap<String,Skill> allSkills = new HashMap<>();
@@ -444,8 +449,10 @@ public class Character implements Serializable {
      */
     public void give(Power power){
         characterPowers.add(power);
-        for (Modifier modifier : power.getPowerModifiers()){
-            this.give(modifier);
+        if(!power.getPowerModifiers().isEmpty()) {
+            for (Modifier modifier : power.getPowerModifiers()) {
+                this.give(modifier);
+            }
         }
     }
 
@@ -456,8 +463,10 @@ public class Character implements Serializable {
      */
     public void remove(Power power){
         characterPowers.remove(power);
-        for (Modifier modifier : power.getPowerModifiers()){
-            this.remove(modifier);
+        if(!power.getPowerModifiers().isEmpty()) {
+            for (Modifier modifier : power.getPowerModifiers()) {
+                this.remove(modifier);
+            }
         }
     }
     //endregion
@@ -501,9 +510,11 @@ public class Character implements Serializable {
     }
 
     public void refreshModifiers(){
-        for (Modifier m : modifiers){
-            addNremove(m,false);
-            addNremove(m,true);
+        if(!modifiers.isEmpty()) {
+            for (Modifier m : modifiers) {
+                addNremove(m, false);
+                addNremove(m, true);
+            }
         }
     }
 
